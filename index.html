@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Sobat Minisoccer — Mockup v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F5F5F3;--su:#fff;--su2:#F0F0ED;--bd:#E4E4E0;
+  --tx:#1A1A18;--mu:#6B6B68;--hi:#A8A8A4;
+  --ac:#1A73E8;--ac2:#EBF3FE;
+  --gn:#16A34A;--gn2:#DCFCE7;
+  --rd:#DC2626;--rd2:#FEE2E2;
+  --am:#B45309;--am2:#FEF3C7;
+  --pu:#7C3AED;--pu2:#EDE9FE;
+  --nv:#1F4E79;
+  --r:8px;--fn:'Inter',system-ui,sans-serif;
+}
+body{font-family:var(--fn);background:var(--bg);color:var(--tx);font-size:13px;line-height:1.5;min-height:100vh}
+
+/* NAV */
+.nav{background:var(--su);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 20px;position:sticky;top:0;z-index:200}
+.nav-logo{display:flex;align-items:center;gap:8px;padding:12px 16px 12px 0;border-right:1px solid var(--bd);margin-right:4px;cursor:pointer}
+.logo-ball{width:28px;height:28px;border-radius:50%;background:var(--nv);display:flex;align-items:center;justify-content:center}
+.logo-ball i{font-size:14px;color:#fff}
+.logo-txt{font-size:13px;font-weight:600;color:var(--tx)}
+.logo-txt span{font-weight:400;color:var(--mu)}
+.nav-tabs{display:flex;flex:1}
+.nav-tab{padding:14px 15px;font-size:13px;color:var(--mu);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;display:flex;align-items:center;gap:5px;user-select:none}
+.nav-tab.active{color:var(--ac);border-bottom-color:var(--ac);font-weight:500}
+.nav-tab:hover:not(.active){color:var(--tx);background:var(--su2)}
+.lock-tag{font-size:10px;background:var(--am2);color:var(--am);padding:1px 6px;border-radius:20px;font-weight:500}
+.nav-right{padding-left:12px}
+.btn-nav{font-size:12px;padding:6px 12px;border-radius:var(--r);border:1px solid var(--bd);background:var(--su);color:var(--mu);cursor:pointer;display:flex;align-items:center;gap:5px;font-family:var(--fn)}
+.btn-nav:hover{background:var(--su2)}
+
+/* LAYOUT */
+.page{display:none;min-height:calc(100vh - 49px)}.page.active{display:block}
+.cont{max-width:1060px;margin:0 auto;padding:22px 20px}
+.pg-hd{margin-bottom:16px;display:flex;align-items:flex-start;justify-content:space-between}
+.pg-title{font-size:17px;font-weight:600}
+.pg-sub{font-size:12px;color:var(--mu);margin-top:2px}
+.pub-badge{font-size:11px;background:var(--gn2);color:var(--gn);padding:4px 9px;border-radius:20px;font-weight:500;display:inline-flex;align-items:center;gap:4px;flex-shrink:0}
+
+/* CARD */
+.card{background:var(--su);border:1px solid var(--bd);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.card-hd{padding:12px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:13px;font-weight:500}
+.card-body{padding:14px 16px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+
+/* METRICS */
+.met{background:var(--su);border:1px solid var(--bd);border-radius:10px;padding:14px 16px}
+.met-lbl{font-size:11px;color:var(--mu);font-weight:500;margin-bottom:5px;display:flex;align-items:center;gap:4px;text-transform:uppercase;letter-spacing:.03em}
+.met-val{font-size:22px;font-weight:600;line-height:1.1}
+.met-sub{font-size:11px;color:var(--mu);margin-top:3px}
+.met.nv .met-val{color:var(--nv)}.met.gn .met-val{color:var(--gn)}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{text-align:left;padding:8px 11px;border-bottom:1px solid var(--bd);font-size:11px;font-weight:500;color:var(--mu);background:var(--su2);white-space:nowrap}
+.tbl td{padding:8px 11px;border-bottom:1px solid var(--bd);color:var(--mu);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl td.pri{color:var(--tx);font-weight:500}
+.tbl tr:hover td{background:#FAFAF9}
+.tbl tfoot td{font-weight:600;background:var(--su2);color:var(--tx)}
+
+/* BADGES */
+.b{font-size:11px;padding:2px 7px;border-radius:20px;font-weight:500;display:inline-block;white-space:nowrap}
+.b-gn{background:var(--gn2);color:var(--gn)}.b-am{background:var(--am2);color:var(--am)}
+.b-rd{background:var(--rd2);color:var(--rd)}.b-ac{background:var(--ac2);color:var(--ac)}
+.b-pu{background:var(--pu2);color:var(--pu)}.b-gy{background:var(--su2);color:var(--mu);border:1px solid var(--bd)}
+.b-sh{background:#FFE4E4;color:#B91C1C;border:1px solid #FCA5A5}
+.b-dp{background:var(--am2);color:var(--am);border:1px solid #FCD34D}
+
+.sd{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:4px}
+.sdg{background:var(--gn)}.sda{background:var(--am)}.sdr{background:var(--rd)}.sdp{background:var(--pu)}
+
+/* INNER TABS */
+.in-tabs{display:flex;border-bottom:1px solid var(--bd);background:var(--su);padding:0 16px}
+.in-tab{font-size:12px;padding:10px 13px;color:var(--mu);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.in-tab.active{color:var(--ac);border-bottom-color:var(--ac);font-weight:500}
+.in-tab:hover:not(.active){color:var(--tx)}
+.tab-p{display:none}.tab-p.active{display:block}
+
+/* TRANSAKSI SIDEBAR */
+.trx-wrap{display:flex;background:var(--su);border:1px solid var(--bd);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.trx-side{width:152px;flex-shrink:0;border-right:1px solid var(--bd);background:var(--su2)}
+.trx-st{padding:11px 14px;font-size:12px;color:var(--mu);cursor:pointer;border-left:3px solid transparent;display:flex;align-items:center;gap:7px;white-space:nowrap;user-select:none}
+.trx-st.active{color:var(--ac);border-left-color:var(--ac);background:var(--su);font-weight:500}
+.trx-st:hover:not(.active){color:var(--tx);background:#EAEAE7}
+.trx-main{flex:1;min-width:0;overflow-x:auto}
+.trx-p{display:none;padding:0}.trx-p.active{display:block}
+
+/* FILTER BAR */
+.fbar{display:flex;gap:8px;align-items:center;padding:10px 16px;background:var(--su);border-bottom:1px solid var(--bd);flex-wrap:wrap}
+.fbar select,.fbar input{font-size:12px;padding:6px 10px;border-radius:var(--r);border:1px solid var(--bd);background:var(--su);color:var(--tx);font-family:var(--fn)}
+.flbl{font-size:12px;color:var(--mu);font-weight:500}
+
+/* BUTTONS */
+.btn{font-size:12px;padding:6px 12px;border-radius:var(--r);border:1px solid var(--bd);background:var(--su);color:var(--tx);cursor:pointer;font-family:var(--fn);display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.btn:hover{background:var(--su2)}
+.btn-prim{background:var(--nv);color:#fff;border-color:var(--nv)}.btn-prim:hover{background:#163e63}
+.btn-dng{color:var(--rd);border-color:#FECACA;background:var(--rd2)}
+.btn-dl{background:var(--ac2);color:var(--ac);border-color:var(--ac)}.btn-dl:hover{background:var(--ac);color:#fff}
+.btn-sm{font-size:11px;padding:4px 9px;border-radius:6px}
+.ib{font-size:11px;padding:4px 7px;border-radius:6px;border:1px solid var(--bd);background:var(--su);color:var(--mu);cursor:pointer;display:inline-flex;align-items:center;gap:3px;font-family:var(--fn)}
+.ib:hover{background:var(--su2)}
+.ib.del:hover{background:var(--rd2);color:var(--rd);border-color:#FECACA}
+.acts{display:flex;gap:4px}
+
+/* SHTM FLAG inline */
+.sf{display:inline-flex;align-items:center;gap:3px;padding:1px 6px;border-radius:20px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid;white-space:nowrap;vertical-align:middle;margin-left:4px}
+.sf-off{background:var(--su2);color:var(--hi);border-color:var(--bd)}
+.sf-off:hover{background:var(--am2);color:var(--am);border-color:#FCD34D}
+.sf-on{background:#FFE4E4;color:#B91C1C;border-color:#FCA5A5}
+
+/* PLAYER GRID */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pcard{background:var(--su);border:1px solid var(--bd);border-radius:var(--r);padding:10px;display:flex;align-items:center;gap:9px;min-width:0}
+.prk{font-size:11px;font-weight:700;min-width:18px;text-align:center;flex-shrink:0}
+.prk.gd{color:#B8860B}.prk.sv{color:#8A8A8A}.prk.bz{color:#8B4513}.prk.nm{color:var(--hi)}
+.pav{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0}
+.pinf{flex:1;min-width:0}
+.pnm{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pmt{font-size:10px;color:var(--mu)}
+.pcnt{font-size:13px;font-weight:700;flex-shrink:0}
+
+/* SPLIT */
+.spl{background:var(--su);border:1px solid var(--bd);border-radius:10px;padding:15px}
+.spl-own{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--mu);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.spl-amt{font-size:23px;font-weight:700;margin-bottom:3px}
+.spl-sub{font-size:11px;color:var(--mu)}
+.spl-bar{height:4px;border-radius:2px;background:var(--su2);margin-top:10px;overflow:hidden}
+.spl-fill{height:100%;border-radius:2px}
+
+/* SLOT TABLE */
+.stbl{width:100%;border-collapse:collapse;font-size:11px}
+.stbl th{text-align:left;padding:7px 9px;border-bottom:1px solid var(--bd);font-size:10px;font-weight:500;color:var(--mu);background:var(--su2);white-space:nowrap}
+.stbl td{padding:6px 9px;border-bottom:1px solid var(--bd);vertical-align:middle}
+.stbl tr:last-child td{border-bottom:none}
+.stbl tr:hover td{background:#FAFAF9}
+.stbl tr.sem{background:#FFFDF0}
+.stbl tr.wki{background:#F5F3FF}
+.stbl select{font-size:11px;padding:3px 5px;border-radius:5px;border:1px solid var(--bd);background:var(--su);color:var(--tx);font-family:var(--fn);max-width:70px}
+
+/* JERSEY */
+.jok{font-size:10px;color:var(--gn);display:flex;align-items:center;gap:3px}
+.jwarn{font-size:10px;color:var(--rd);display:flex;align-items:center;gap:3px}
+
+/* JERSEY STOCK CARDS */
+.jersey-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.jcard{background:var(--su);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+.jcard-hd{padding:9px 13px;font-size:13px;font-weight:600;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px}
+.jdot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.jrow{display:flex;align-items:center;justify-content:space-between;padding:7px 13px;border-bottom:1px solid var(--bd);font-size:12px}
+.jrow:last-child{border-bottom:none}
+.jlbl{color:var(--mu);font-weight:500}
+.jstock{display:flex;align-items:center;gap:8px}
+.jbar{width:56px;height:5px;background:var(--su2);border-radius:3px;overflow:hidden}
+.jbar-fill{height:100%;border-radius:3px}
+.jnum{font-size:12px;font-weight:700}
+.jnum.ok{color:var(--gn)}.jnum.low{color:var(--am)}.jnum.zero{color:var(--rd)}
+
+/* CHART */
+.ch{position:relative;padding:4px 0}
+.ch-160{height:160px}.ch-140{height:140px}.ch-130{height:130px}
+
+/* MATCH HEADER */
+.mhd{padding:12px 16px;background:var(--su);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.mb-wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bd);border-bottom:1px solid var(--bd)}
+.mb-cell{background:var(--su);padding:11px 14px}
+.mb-cell.profit{background:var(--gn2);border-left:3px solid var(--gn)}
+.mb-lbl{font-size:10px;color:var(--mu);margin-bottom:2px;text-transform:uppercase;letter-spacing:.03em}
+.mb-val{font-size:15px;font-weight:700}
+
+/* REKAP */
+.rkg{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bd)}
+.rkg-c{background:var(--su);padding:12px 14px}
+.rkg-c.hi{background:var(--gn2);border-left:3px solid var(--gn)}
+.rkg-lbl{font-size:11px;color:var(--mu);margin-bottom:3px}
+.rkg-val{font-size:16px;font-weight:700}
+
+.gol-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:20px;background:var(--gn2);color:var(--gn);font-size:11px;font-weight:600;border:1px solid #86EFAC}
+
+.dep-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--bd)}
+.dep-row:last-child{border-bottom:none}
+
+.chips{display:flex;gap:5px}
+.chip{font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid var(--bd);color:var(--mu);cursor:pointer;background:var(--su);user-select:none}
+.chip.active{background:var(--ac2);border-color:var(--ac);color:var(--ac)}
+
+.sec-lbl{font-size:10px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.05em;padding:8px 14px;background:var(--su2);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+/* MODAL */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:20px;z-index:500}
+.modal-ov.open{display:flex}
+.modal{background:var(--su);border-radius:12px;border:1px solid var(--bd);width:100%;max-width:440px;overflow:hidden;max-height:90vh;display:flex;flex-direction:column}
+.modal-wide{max-width:760px}
+.modal-hd{padding:13px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-title{font-size:14px;font-weight:600;display:flex;align-items:center;gap:7px}
+.modal-body{padding:15px;overflow-y:auto;flex:1}
+.modal-ft{padding:11px 15px;border-top:1px solid var(--bd);display:flex;justify-content:flex-end;gap:8px;background:var(--su2);flex-shrink:0}
+.fg{display:flex;flex-direction:column;gap:4px;margin-bottom:11px}
+.fl{font-size:12px;color:var(--mu);font-weight:500}
+.fg input,.fg select,.fg textarea{font-size:12px;padding:7px 10px;border-radius:var(--r);border:1px solid var(--bd);background:var(--su);color:var(--tx);font-family:var(--fn);width:100%}
+.fg input:focus,.fg select:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 3px rgba(26,115,232,.1)}
+.g2f{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.info{border-radius:var(--r);padding:8px 10px;font-size:11px;margin-top:4px;display:flex;align-items:flex-start;gap:6px}
+.info-ac{background:var(--ac2);color:var(--ac)}
+.info-gn{background:var(--gn2);color:var(--gn)}
+.info-am{background:var(--am2);color:var(--am)}
+.info-pu{background:var(--pu2);color:var(--pu)}
+.info-rd{background:var(--rd2);color:var(--rd)}
+
+.login-wrap{max-width:340px;margin:50px auto;padding:0 20px}
+.login-card{background:var(--su);border:1px solid var(--bd);border-radius:14px;padding:28px}
+</style>
+
+<script>
+// ═══════════════════════════════════════════════════
+// api.js — Sobat Minisoccer Portal
+// Ganti GAS_URL dengan URL deployment Google Apps Script
+// ═══════════════════════════════════════════════════
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxEx5NYBvuF8Ccptbhj95PDFxTHB8F13_stiVeS53DjhcUEeCPZ8jbjDVaujXmZU-fo_w/exec'; // Apps Script endpoint
+
+// ── Core fetch ──────────────────────────────────────
+async function gasGet(action, params={}) {
+  const url = new URL(GAS_URL);
+  url.searchParams.set('action', action);
+  Object.entries(params).forEach(([k,v]) => url.searchParams.set(k, v));
+  try {
+    const res  = await fetch(url.toString());
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    return data;
+  } catch(e) {
+    console.error('gasGet error:', action, e);
+    throw e;
+  }
+}
+
+async function gasPost(action, payload={}) {
+  try {
+    const res  = await fetch(GAS_URL, {
+      method : 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body   : JSON.stringify({ action, ...payload })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    return data;
+  } catch(e) {
+    console.error('gasPost error:', action, e);
+    throw e;
+  }
+}
+
+// ── API methods ─────────────────────────────────────
+const API = {
+  // GET
+  getDashboard    : ()  => gasGet('getDashboard'),
+  getPlayers      : ()  => gasGet('getPlayers'),
+  getMatches      : ()  => gasGet('getMatches'),
+  getMatch        : (id)=> gasGet('getMatch', {id}),
+  getStokJersey   : ()  => gasGet('getStokJersey'),
+  getShtm         : ()  => gasGet('getShtm'),
+  getDeposit      : ()  => gasGet('getDeposit'),
+  getConfig       : ()  => gasGet('getConfig'),
+
+  // POST — Match
+  createMatch     : (p) => gasPost('createMatch', p),
+  closeMatch      : (p) => gasPost('closeMatch', p),
+
+  // POST — Player dalam match
+  addPlayer       : (p) => gasPost('addPlayer', p),
+  updatePlayer    : (p) => gasPost('updatePlayer', p),
+  deletePlayer    : (p) => gasPost('deletePlayer', p),
+
+  // POST — Biaya
+  addBiaya        : (p) => gasPost('addBiaya', p),
+  updateBiaya     : (p) => gasPost('updateBiaya', p),
+  deleteBiaya     : (p) => gasPost('deleteBiaya', p),
+
+  // POST — Gol
+  addGol          : (p) => gasPost('addGol', p),
+  deleteGol       : (p) => gasPost('deleteGol', p),
+
+  // POST — SHTM
+  flagShtm        : (p) => gasPost('flagShtm', p),
+  useShtm         : (p) => gasPost('useShtm', p),
+
+  // POST — Deposit
+  addDeposit      : (p) => gasPost('addDeposit', p),
+  useDeposit      : (p) => gasPost('useDeposit', p),
+
+  // POST — Stok Jersey
+  updateStokJersey: (p) => gasPost('updateStokJersey', p),
+
+  // POST — DB Player
+  addNewPlayer    : (p) => gasPost('addNewPlayer', p),
+
+  // POST — Config
+  updateConfig    : (p) => gasPost('updateConfig', p),
+};
+
+// ── Auth sederhana (localStorage) ───────────────────
+const AUTH = {
+  PASSWORD: 'sms2024', // ← ganti password di sini
+  login(pw) {
+    if (pw === this.PASSWORD) {
+      localStorage.setItem('sms_auth', btoa(pw + Date.now()));
+      return true;
+    }
+    return false;
+  },
+  logout() { localStorage.removeItem('sms_auth'); },
+  isLoggedIn() { return !!localStorage.getItem('sms_auth'); },
+};
+</script>
+
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo" onclick="goPage('dashboard')">
+    <div class="logo-ball"><i class="ti ti-ball-football"></i></div>
+    <div class="logo-txt">Sobat Minisoccer <span>· SMS</span></div>
+  </div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" id="ntab-dashboard" onclick="goPage('dashboard')"><i class="ti ti-layout-dashboard" style="font-size:14px"></i> Dashboard</div>
+    <div class="nav-tab" id="ntab-reporting" onclick="goPage('reporting')"><i class="ti ti-chart-bar" style="font-size:14px"></i> Reporting</div>
+    <div class="nav-tab" id="ntab-transaksi" onclick="goPage('transaksi')"><i class="ti ti-clipboard-list" style="font-size:14px"></i> Transaksi <span class="lock-tag"><i class="ti ti-lock" style="font-size:9px"></i> Login</span></div>
+    <div class="nav-tab" id="ntab-admin" onclick="goPage('admin')"><i class="ti ti-settings" style="font-size:14px"></i> Admin <span class="lock-tag"><i class="ti ti-lock" style="font-size:9px"></i> Login</span></div>
+  </div>
+  <div class="nav-right" style="display:flex;gap:8px">
+    <button id="btn-logout" class="btn-nav" onclick="doLogout()" style="display:none;color:#DC2626"><i class="ti ti-logout" style="font-size:13px"></i> Logout</button>
+    <button class="btn-nav" onclick="goPage('login')"><i class="ti ti-login" style="font-size:13px"></i> Login admin</button>
+  </div>
+</nav>
+
+<!-- ══════════════ DASHBOARD ══════════════ -->
+<div id="page-dashboard" class="page active">
+<div class="cont">
+  <div class="pg-hd">
+    <div><div class="pg-title">Dashboard</div><div class="pg-sub">Sobat Minisoccer · 44 match sejak Oktober 2023</div></div>
+    <span class="pub-badge"><i class="ti ti-world" style="font-size:12px"></i> Publik — tanpa login</span>
+  </div>
+
+  <!-- 3 metric cards: hapus shared profit dobel, cukup 1 -->
+  <div class="g3" style="margin-bottom:14px">
+    <div class="met"><div class="met-lbl"><i class="ti ti-calendar" style="font-size:12px"></i>Total match</div><div class="met-val">44</div><div class="met-sub">Terakhir: 6 Sept 2026</div></div>
+    <div class="met"><div class="met-lbl"><i class="ti ti-users" style="font-size:12px"></i>Player terdaftar</div>
+      <div class="met-val" style="cursor:pointer;color:var(--ac);text-decoration:underline dotted" onclick="openModal('m-db-player')">143</div>
+      <div class="met-sub"><span style="color:var(--ac);cursor:pointer;font-size:11px" onclick="openModal('m-db-player')">Lihat semua →</span></div>
+    </div>
+    <div class="met"><div class="met-lbl"><i class="ti ti-trophy" style="font-size:12px"></i>Match terbaik</div><div class="met-val" style="color:var(--gn)">+489rb</div><div class="met-sub">26 Juli BIG — Internal BIG</div></div>
+  </div>
+
+  <!-- ROW 1: Margin + Shared profit (1 card, digabung) -->
+  <div class="g2" style="margin-bottom:14px">
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-title">Margin per match</span>
+        <div class="chips">
+          <span class="chip active" onclick="switchChart(12,this)">12</span>
+          <span class="chip" onclick="switchChart(24,this)">24</span>
+          <span class="chip" onclick="switchChart(44,this)">Semua</span>
+        </div>
+      </div>
+      <div class="card-body" style="padding:12px 16px">
+        <div class="ch ch-160"><canvas id="chartMargin"></canvas></div>
+        <div style="display:flex;gap:14px;font-size:11px;color:var(--mu);margin-top:6px">
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:20px;height:3px;background:var(--gn);display:inline-block;border-radius:2px"></span>Untung</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:20px;height:3px;background:var(--rd);display:inline-block;border-radius:2px"></span>Tombok</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:20px;height:3px;border-top:2px dashed var(--hi);display:inline-block"></span>Impas</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shared profit — SATU card, bukan dobel -->
+    <div class="card">
+      <div class="card-hd"><span class="card-title">Shared profit kumulatif — Malik & Filan</span></div>
+      <div class="card-body" style="display:flex;flex-direction:column;gap:14px">
+        <div>
+          <div style="font-size:10px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Malik · 60%</div>
+          <div style="font-size:26px;font-weight:700;color:var(--nv)">Rp 8.297.430</div>
+          <div style="font-size:11px;color:var(--mu);margin-top:2px">+Rp 709.800 dari 4 match terakhir</div>
+          <div style="height:5px;border-radius:3px;background:var(--su2);margin-top:8px;overflow:hidden"><div style="width:60%;height:100%;background:var(--nv);border-radius:3px"></div></div>
+        </div>
+        <div style="border-top:1px solid var(--bd);padding-top:14px">
+          <div style="font-size:10px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Filan · 40%</div>
+          <div style="font-size:26px;font-weight:700;color:var(--gn)">Rp 5.472.562</div>
+          <div style="font-size:11px;color:var(--mu);margin-top:2px">+Rp 473.200 dari 4 match terakhir</div>
+          <div style="height:5px;border-radius:3px;background:var(--su2);margin-top:8px;overflow:hidden"><div style="width:40%;height:100%;background:var(--gn);border-radius:3px"></div></div>
+        </div>
+        <div style="border-top:1px solid var(--bd);padding-top:10px;display:flex;justify-content:space-between;font-size:12px">
+          <span style="color:var(--mu)">Total bersama</span>
+          <span style="font-weight:600">Rp 13.769.992</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 2: Histogram profit per tipe + lapangan -->
+  <div class="g2" style="margin-bottom:14px">
+    <!-- Histogram utama: kecil vs besar, filter tipe event -->
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-title">Profit per match — Minisoccer vs Football</span>
+      </div>
+      <!-- Filter tipe event sama dengan pilihan di buat match baru -->
+      <div style="padding:8px 14px;border-bottom:1px solid var(--bd);display:flex;gap:6px;flex-wrap:wrap">
+        <span class="chip active" onclick="filterTipe('semua',this)">Semua</span>
+        <span class="chip" onclick="filterTipe('internal',this)">Internal</span>
+        <span class="chip" onclick="filterTipe('join',this)">Join Game</span>
+        <span class="chip" onclick="filterTipe('sparing',this)">Sparing Eksternal</span>
+      </div>
+      <div class="card-body" style="padding:12px 16px">
+        <div class="ch ch-160"><canvas id="chartLapangan"></canvas></div>
+        <div style="display:flex;gap:14px;font-size:11px;color:var(--mu);margin-top:8px">
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;background:var(--nv);border-radius:2px;display:inline-block"></span>Minisoccer</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;background:var(--gn);border-radius:2px;display:inline-block"></span>Football</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Frequent + top skor -->
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="card" style="margin-bottom:0">
+        <div class="card-hd"><span class="card-title">Frequent players — top 9</span></div>
+        <div class="card-body" style="padding:10px">
+          <div class="pgrid">
+            <div class="pcard"><span class="prk gd">1</span><div class="pav" style="background:#EFF6FF;color:#1D4ED8">MA</div><div class="pinf"><div class="pnm">Malik</div><div class="pmt">SMS · GK</div></div><div class="pcnt">40×</div></div>
+            <div class="pcard"><span class="prk sv">2</span><div class="pav" style="background:#F0FDF4;color:#15803D">FI</div><div class="pinf"><div class="pnm">Filan</div><div class="pmt">SMS · GK</div></div><div class="pcnt">37×</div></div>
+            <div class="pcard"><span class="prk bz">3</span><div class="pav" style="background:#FEF3C7;color:#92400E">JY</div><div class="pinf"><div class="pnm">Jayadi</div><div class="pmt">Umum</div></div><div class="pcnt">35×</div></div>
+            <div class="pcard"><span class="prk nm">4</span><div class="pav" style="background:#F3E8FF;color:#6D28D9">AN</div><div class="pinf"><div class="pnm">Annas</div><div class="pmt">BMR</div></div><div class="pcnt">33×</div></div>
+            <div class="pcard"><span class="prk nm">5</span><div class="pav" style="background:#EFF6FF;color:#1D4ED8">HS</div><div class="pinf"><div class="pnm">Hisyam</div><div class="pmt">SMS</div></div><div class="pcnt">30×</div></div>
+            <div class="pcard"><span class="prk nm">6</span><div class="pav" style="background:#F0FDF4;color:#15803D">TV</div><div class="pinf"><div class="pnm">Tavano</div><div class="pmt">Umum</div></div><div class="pcnt">28×</div></div>
+            <div class="pcard"><span class="prk nm">7</span><div class="pav" style="background:#FEF3C7;color:#92400E">BS</div><div class="pinf"><div class="pnm">Bagus Suryo</div><div class="pmt">Umum</div></div><div class="pcnt">27×</div></div>
+            <div class="pcard"><span class="prk nm">8</span><div class="pav" style="background:#F3E8FF;color:#6D28D9">BM</div><div class="pinf"><div class="pnm">Bambang</div><div class="pmt">Umum</div></div><div class="pcnt">26×</div></div>
+            <div class="pcard"><span class="prk nm">9</span><div class="pav" style="background:#EFF6FF;color:#1D4ED8">ND</div><div class="pinf"><div class="pnm">Nandha</div><div class="pmt">SMS · GK</div></div><div class="pcnt">25×</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <div class="card-hd">
+          <span class="card-title"><i class="ti ti-trophy" style="color:#B8860B;font-size:14px"></i> Top skor — total gol</span>
+          <div class="chips"><span class="chip active">All time</span><span class="chip">2026</span></div>
+        </div>
+        <div class="card-body" style="padding:8px 0" id="d-scorer"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════ REPORTING ══════════════ -->
+<div id="page-reporting" class="page">
+<div class="cont">
+  <div class="pg-hd">
+    <div><div class="pg-title">Reporting</div><div class="pg-sub">Data keuangan dan statistik match</div></div>
+    <span class="pub-badge"><i class="ti ti-world" style="font-size:12px"></i> Publik</span>
+  </div>
+</div>
+<div style="max-width:1060px;margin:0 auto 24px;padding:0 20px">
+<div class="card" style="margin-bottom:0">
+  <div style="padding:11px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <span class="flbl">Match</span>
+    <select style="font-size:12px;padding:6px 10px;border-radius:var(--r);border:1px solid var(--bd);font-family:var(--fn)">
+      <option>6 Sept 2026</option><option>15 Agust BOSS</option><option>26 Juli BIG</option><option>12 Juli BOSS</option>
+    </select>
+    <button class="btn btn-dl"><i class="ti ti-download" style="font-size:13px"></i> Download laporan PDF</button>
+    <span style="font-size:11px;color:var(--hi)">Player · biaya · margin · split · inventaris</span>
+  </div>
+  <div class="in-tabs">
+    <div class="in-tab active" onclick="rptTab('pembayaran',this)">Pembayaran player</div>
+    <div class="in-tab" onclick="rptTab('operasional',this)">Operasional</div>
+    <div class="in-tab" onclick="rptTab('margin',this)">Margin per match</div>
+    <div class="in-tab" onclick="rptTab('split',this)">Shared profit</div>
+  </div>
+  <div id="rpt-pembayaran" class="tab-p active">
+    <div class="fbar"><span class="flbl">Status</span><select><option>Semua</option><option>Lunas</option><option>Sementara</option><option>Walk-in</option><option>Cancel</option></select></div>
+    <table class="tbl">
+      <thead><tr><th>Player</th><th>HTM</th><th>Label</th><th>Deposit dipakai</th><th>BCA</th><th>BSI</th><th>Cash</th><th>Tgl bayar</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td class="pri">Malik</td><td>95.000</td><td><span class="b b-gy">Normal</span></td><td>—</td><td>95.000</td><td>—</td><td>—</td><td>02/09</td><td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td></tr>
+        <tr><td class="pri">Ricky <span class="b b-sh" style="font-size:9px">SHTM</span></td><td>50.000</td><td><span class="b b-sh">SHTM</span></td><td>—</td><td>—</td><td>50.000</td><td>—</td><td>04/09</td><td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td></tr>
+        <tr><td class="pri">Wayan <span class="b b-dp" style="font-size:9px">Dep 70rb</span></td><td>95.000</td><td><span class="b b-gy">Normal</span></td><td style="color:var(--am);font-weight:500">70.000</td><td>—</td><td>—</td><td>25.000</td><td>05/09</td><td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td></tr>
+        <tr><td class="pri">Jayadi</td><td>95.000</td><td><span class="b b-gy">Normal</span></td><td>—</td><td>—</td><td>95.000</td><td>—</td><td>03/09</td><td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td></tr>
+        <tr><td class="pri">Heru</td><td>95.000</td><td><span class="b b-gy">Normal</span></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="b b-am"><span class="sd sda"></span>Sementara</span></td></tr>
+      </tbody>
+      <tfoot><tr><td colspan="3">Total terkumpul</td><td style="color:var(--am)">Rp 70.000</td><td>Rp 95.000</td><td>Rp 180.000</td><td>Rp 25.000</td><td colspan="2" style="color:var(--gn)">= Rp 1.530.000</td></tr></tfoot>
+    </table>
+  </div>
+  <div id="rpt-operasional" class="tab-p">
+    <table class="tbl">
+      <thead><tr><th>Item</th><th>Tipe</th><th>Rencana (Rp)</th><th>Realisasi (Rp)</th><th>Selisih</th></tr></thead>
+      <tbody>
+        <tr><td class="pri">Sewa lapangan</td><td><span class="b b-gy">Ops</span></td><td>1.300.000</td><td>1.300.000</td><td>—</td></tr>
+        <tr><td class="pri">Wasit</td><td><span class="b b-gy">Ops</span></td><td>200.000</td><td>200.000</td><td>—</td></tr>
+        <tr><td class="pri">Air + laundry</td><td><span class="b b-gy">Ops</span></td><td>85.000</td><td>85.000</td><td>—</td></tr>
+        <tr><td class="pri">Gimmick voucher</td><td><span class="b b-gy">Ops</span></td><td>29.000</td><td>29.000</td><td>—</td></tr>
+      </tbody>
+      <tfoot><tr><td colspan="2">Total</td><td>Rp 1.614.000</td><td style="color:var(--rd)">Rp 1.614.000</td><td>—</td></tr></tfoot>
+    </table>
+  </div>
+  <div id="rpt-margin" class="tab-p">
+    <div class="fbar">
+      <span class="flbl">Periode</span><select><option>Semua match</option><option>2026</option><option>2025</option></select>
+      <span class="flbl">Tipe</span><select><option>Semua tipe</option><option>Internal</option><option>Join Game</option><option>Sparing Eksternal</option></select>
+    </div>
+    <div style="padding:14px 16px;border-bottom:1px solid var(--bd)"><div style="position:relative;height:140px"><canvas id="chartRptMargin"></canvas></div></div>
+    <table class="tbl">
+      <thead><tr><th>Match</th><th>Tipe</th><th>Sales (Rp)</th><th>Cost (Rp)</th><th>Margin (Rp)</th><th>Malik 60%</th><th>Filan 40%</th></tr></thead>
+      <tbody>
+        <tr><td class="pri">6 Sept 2026</td><td><span class="b b-gy">Internal</span></td><td>1.863.500</td><td>1.614.000</td><td style="color:var(--gn);font-weight:600">+249.500</td><td style="color:var(--nv)">149.700</td><td style="color:var(--gn)">99.800</td></tr>
+        <tr><td class="pri">15 Agust BOSS</td><td><span class="b b-gy">Internal</span></td><td>1.822.500</td><td>1.621.000</td><td style="color:var(--gn);font-weight:600">+201.500</td><td style="color:var(--nv)">120.900</td><td style="color:var(--gn)">80.600</td></tr>
+        <tr><td class="pri">26 Juli BIG</td><td><span class="b b-ac">Internal BIG</span></td><td>2.160.000</td><td>1.671.000</td><td style="color:var(--gn);font-weight:600">+489.000</td><td style="color:var(--nv)">293.400</td><td style="color:var(--gn)">195.600</td></tr>
+        <tr><td class="pri">12 Juli BOSS</td><td><span class="b b-gy">Internal</span></td><td>1.850.000</td><td>1.607.000</td><td style="color:var(--gn);font-weight:600">+243.000</td><td style="color:var(--nv)">145.800</td><td style="color:var(--gn)">97.200</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div id="rpt-split" class="tab-p">
+    <div style="padding:14px 16px;border-bottom:1px solid var(--bd)">
+      <div class="g2">
+        <div class="spl"><div class="spl-own" style="color:var(--nv)"><i class="ti ti-user"></i>Malik · 60%</div><div class="spl-amt" style="color:var(--nv)">Rp 8.297.430</div><div class="spl-sub">+Rp 709.800 dari 4 match terakhir</div><div class="spl-bar"><div class="spl-fill" style="width:60%;background:var(--nv)"></div></div></div>
+        <div class="spl"><div class="spl-own" style="color:var(--gn)"><i class="ti ti-user"></i>Filan · 40%</div><div class="spl-amt" style="color:var(--gn)">Rp 5.472.562</div><div class="spl-sub">+Rp 473.200 dari 4 match terakhir</div><div class="spl-bar"><div class="spl-fill" style="width:40%;background:var(--gn)"></div></div></div>
+      </div>
+    </div>
+    <table class="tbl">
+      <thead><tr><th>Match</th><th>Margin</th><th>Net Malik (60%)</th><th>Net Filan (40%)</th><th>Kumulatif Malik</th><th>Kumulatif Filan</th></tr></thead>
+      <tbody>
+        <tr><td class="pri">6 Sept 2026</td><td style="color:var(--gn)">+249.500</td><td style="color:var(--nv);font-weight:500">+149.700</td><td style="color:var(--gn);font-weight:500">+99.800</td><td>8.297.430</td><td>5.472.562</td></tr>
+        <tr><td class="pri">15 Agust</td><td style="color:var(--gn)">+201.500</td><td style="color:var(--nv);font-weight:500">+120.900</td><td style="color:var(--gn);font-weight:500">+80.600</td><td>8.147.730</td><td>5.372.762</td></tr>
+        <tr><td class="pri">26 Juli BIG</td><td style="color:var(--gn)">+489.000</td><td style="color:var(--nv);font-weight:500">+293.400</td><td style="color:var(--gn);font-weight:500">+195.600</td><td>8.026.830</td><td>5.292.162</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ══════════════ TRANSAKSI ══════════════ -->
+<div id="page-transaksi" class="page">
+<div class="cont">
+  <div class="pg-hd">
+    <div><div class="pg-title">Transaksi match</div><div class="pg-sub">Input dan kelola match aktif</div></div>
+    <button class="btn btn-prim" onclick="openModal('m-match-baru')"><i class="ti ti-plus"></i> Match baru</button>
+  </div>
+  <div class="card">
+    <div class="mhd">
+      <div>
+        <div style="font-size:14px;font-weight:600">6 September 2026 — Internal SMS</div>
+        <div style="font-size:11px;color:var(--mu);margin-top:2px">Futsal Menteng · Lapangan Kecil · HTM Rp 95.000 · GK Rp 35.000</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="b b-gn" style="font-size:12px;padding:5px 10px"><span class="sd sdg"></span>Match aktif</span>
+        <button class="btn btn-dng" onclick="openModal('m-tutup-match')"><i class="ti ti-lock"></i> Tutup match</button>
+      </div>
+    </div>
+    <div class="mb-wrap">
+      <div class="mb-cell"><div class="mb-lbl">Sales pasti (Lunas)</div><div class="mb-val" style="color:var(--nv)">Rp 1.530.000</div></div>
+      <div class="mb-cell"><div class="mb-lbl">Sales estimasi (Sementara)</div><div class="mb-val" style="color:var(--am)">Rp 95.000</div></div>
+      <div class="mb-cell"><div class="mb-lbl">Total cost (rencana)</div><div class="mb-val" style="color:var(--rd)">Rp 1.614.000</div></div>
+      <div class="mb-cell profit"><div class="mb-lbl" style="color:var(--gn)">Margin proyeksi</div><div class="mb-val" style="color:var(--gn)">+Rp 11.000</div></div>
+    </div>
+
+    <div class="trx-wrap" style="border-radius:0;border:none;border-top:1px solid var(--bd)">
+      <div class="trx-side">
+        <div class="trx-st active" onclick="trxTab('slot',this)"><i class="ti ti-users" style="font-size:13px"></i> Slot player</div>
+        <div class="trx-st" onclick="trxTab('biaya',this)"><i class="ti ti-receipt" style="font-size:13px"></i> Biaya match</div>
+        <div class="trx-st" onclick="trxTab('deposit',this)"><i class="ti ti-wallet" style="font-size:13px"></i> Deposit player</div>
+        <div class="trx-st" onclick="trxTab('gol',this)"><i class="ti ti-ball-football" style="font-size:13px"></i> Goal scorer</div>
+        <div class="trx-st" onclick="trxTab('rekap',this)"><i class="ti ti-chart-pie" style="font-size:13px"></i> Rekap akhir</div>
+      </div>
+      <div class="trx-main">
+
+        <!-- SLOT PLAYER — Tim di kanan Status, SHTM flag di sebelah nama -->
+        <div id="trx-slot" class="trx-p active">
+          <div class="sec-lbl">
+            Slot player — 6 / 28 terisi
+            <button class="btn btn-sm" onclick="openModal('m-tambah-player')"><i class="ti ti-user-plus"></i> Tambah player</button>
+            <button class="btn btn-sm" style="background:var(--gn2);color:var(--gn);border-color:#86EFAC;margin-left:auto" onclick="openModal('m-broadcast')">
+              <i class="ti ti-broadcast"></i> Generate broadcast
+            </button>
+            <button class="btn btn-sm" style="background:var(--ac2);color:var(--ac);border-color:var(--ac)" onclick="openModal('m-lineup-view')">
+              <i class="ti ti-layout-grid"></i> Lihat line up
+            </button>
+          </div>
+          <table class="stbl">
+            <thead>
+              <tr>
+                <th style="width:28px">No</th>
+                <th style="width:180px">Nama player</th>
+                <th style="width:70px">HTM (Rp)</th>
+                <th style="width:76px">Label</th>
+                <th style="width:76px">Deposit</th>
+                <th style="width:76px">Bank/Cash</th>
+                <th style="width:50px">Posisi</th>
+                <th style="width:120px">Jersey</th>
+                <th style="width:48px">Ukuran</th>
+                <th style="width:82px">Status</th>
+                <th style="width:82px" id="th-formasi" style="display:none">Formasi</th>
+                <th style="width:60px">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- FIELD PLAYER -->
+              <tr>
+                <td style="color:var(--hi)">GK</td>
+                <td style="font-weight:500">Malik <button class="sf sf-off" onclick="toggleSf(this,'Malik','6 Sept 2026')"><i class="ti ti-ticket" style="font-size:9px"></i> Next</button></td>
+                <td>95.000</td><td><span class="b b-gy">Normal</span></td>
+                <td style="color:var(--mu)">—</td><td><span class="b b-ac">BCA</span></td>
+                <td><span class="b b-gy">GK</span></td>
+                <td>
+                  <select class="jersey-sel" data-posisi="gk" onchange="onJerseyChange(this)">
+                    <option value="">— pilih</option>
+                    <option value="Merah">Merah</option>
+                    <option value="Kuning">Kuning</option>
+                    <option value="Biru">Biru</option>
+                    <option value="Hijau">Hijau</option>
+                  </select>
+                  <div class="jersey-notif" style="font-size:10px;margin-top:3px"></div>
+                </td>
+                <td><span class="b b-gy">M</span></td>
+                <td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td>
+                <td class="td-formasi" style="display:none">
+                  <select class="formasi-sel" style="font-size:11px;padding:3px 5px;border-radius:5px;border:1px solid var(--bd);background:var(--su);font-family:var(--fn);max-width:68px">
+                    <option>GK</option><option>CB</option><option>RB</option><option>LB</option>
+                    <option>DMF</option><option>AMF</option><option>LMF</option><option>RMF</option>
+                    <option>CMF</option><option>CF</option><option>SS</option>
+                  </select>
+                </td>
+                <td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td>
+              </tr>
+              <tr style="background:#FFF5F5">
+                <td style="color:var(--hi)">1</td>
+                <td style="font-weight:500">Ricky <span class="b b-sh" style="font-size:9px">SHTM</span><button class="sf sf-off" onclick="toggleSf(this,'Ricky','6 Sept 2026')"><i class="ti ti-ticket" style="font-size:9px"></i> Next</button></td>
+                <td>50.000</td><td><span class="b b-sh">SHTM</span></td>
+                <td style="color:var(--mu)">—</td><td><span class="b b-ac">BSI</span></td>
+                <td><span class="b b-gy">Field</span></td>
+                <td>
+                  <select class="jersey-sel" data-posisi="field" onchange="onJerseyChange(this)">
+                    <option value="">— pilih</option>
+                    <option value="Merah" selected>Merah</option>
+                    <option value="Kuning">Kuning</option>
+                    <option value="Biru">Biru</option>
+                    <option value="Hijau">Hijau</option>
+                  </select>
+                  <div class="jersey-notif jok" style="font-size:10px;margin-top:3px"><i class="ti ti-check" style="font-size:9px"></i> OK</div>
+                </td>
+                <td><span class="b b-gy">M</span></td>
+                <td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td>
+                <td class="td-formasi" style="display:none">
+                  <select class="formasi-sel" style="font-size:11px;padding:3px 5px;border-radius:5px;border:1px solid var(--bd);background:var(--su);font-family:var(--fn);max-width:68px">
+                    <option>GK</option><option>CB</option><option>RB</option><option>LB</option>
+                    <option>DMF</option><option>AMF</option><option>LMF</option><option>RMF</option>
+                    <option>CMF</option><option>CF</option><option>SS</option>
+                  </select>
+                </td>
+                <td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td>
+              </tr>
+              <tr>
+                <td style="color:var(--hi)">2</td>
+                <td style="font-weight:500">Wayan <span class="b b-dp" style="font-size:9px">Dep 70rb</span><button class="sf sf-off" onclick="toggleSf(this,'Wayan','6 Sept 2026')"><i class="ti ti-ticket" style="font-size:9px"></i> Next</button></td>
+                <td>95.000</td><td><span class="b b-gy">Normal</span></td>
+                <td style="color:var(--am);font-weight:500">-70.000</td><td><span class="b b-gy">Cash 25rb</span></td>
+                <td><span class="b b-gy">Field</span></td>
+                <td>
+                  <select class="jersey-sel" data-posisi="field" onchange="onJerseyChange(this)">
+                    <option value="">— pilih</option>
+                    <option value="Merah" selected>Merah</option>
+                    <option value="Kuning">Kuning</option>
+                    <option value="Biru">Biru</option>
+                    <option value="Hijau">Hijau</option>
+                  </select>
+                  <div class="jersey-notif jok" style="font-size:10px;margin-top:3px"><i class="ti ti-check" style="font-size:9px"></i> OK</div>
+                </td>
+                <td><span class="b b-gy">L</span></td>
+                <td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td>
+                <td class="td-formasi" style="display:none">
+                  <select class="formasi-sel" style="font-size:11px;padding:3px 5px;border-radius:5px;border:1px solid var(--bd);background:var(--su);font-family:var(--fn);max-width:68px">
+                    <option>GK</option><option>CB</option><option>RB</option><option>LB</option>
+                    <option>DMF</option><option>AMF</option><option>LMF</option><option>RMF</option>
+                    <option>CMF</option><option>CF</option><option>SS</option>
+                  </select>
+                </td>
+                <td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td>
+              </tr>
+              <tr>
+                <td style="color:var(--hi)">3</td>
+                <td style="font-weight:500">Jayadi <button class="sf sf-on" onclick="toggleSf(this,'Jayadi','6 Sept 2026')"><i class="ti ti-ticket" style="font-size:9px"></i> SHTM Next ✓</button></td>
+                <td>95.000</td><td><span class="b b-gy">Normal</span></td>
+                <td style="color:var(--mu)">—</td><td><span class="b b-ac">BSI</span></td>
+                <td><span class="b b-gy">Field</span></td>
+                <td>
+                  <select class="jersey-sel" data-posisi="field" onchange="onJerseyChange(this)">
+                    <option value="">— pilih</option>
+                    <option value="Merah" selected>Merah</option>
+                    <option value="Kuning">Kuning</option>
+                    <option value="Biru">Biru</option>
+                    <option value="Hijau">Hijau</option>
+                  </select>
+                  <div class="jersey-notif jwarn" style="font-size:10px;margin-top:3px"><i class="ti ti-alert-triangle" style="font-size:9px"></i> XL habis!</div>
+                </td>
+                <td><span class="b b-gy">XL</span></td>
+                <td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td>
+                <td class="td-formasi" style="display:none">
+                  <select class="formasi-sel" style="font-size:11px;padding:3px 5px;border-radius:5px;border:1px solid var(--bd);background:var(--su);font-family:var(--fn);max-width:68px">
+                    <option>GK</option><option>CB</option><option>RB</option><option>LB</option>
+                    <option>DMF</option><option>AMF</option><option>LMF</option><option>RMF</option>
+                    <option>CMF</option><option>CF</option><option>SS</option>
+                  </select>
+                </td>
+                <td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td>
+              </tr>
+              <tr class="sem">
+                <td style="color:var(--hi)">4</td>
+                <td style="font-weight:500">Heru <button class="sf sf-off" onclick="toggleSf(this,'Heru','6 Sept 2026')"><i class="ti ti-ticket" style="font-size:9px"></i> Next</button></td>
+                <td>95.000</td><td><span class="b b-gy">Normal</span></td>
+                <td style="color:var(--mu)">—</td><td style="color:var(--mu)">—</td>
+                <td><span class="b b-gy">Field</span></td>
+                <td>
+                  <select class="jersey-sel" data-posisi="field" onchange="onJerseyChange(this)">
+                    <option value="">— pilih</option>
+                    <option value="Merah">Merah</option>
+                    <option value="Kuning" selected>Kuning</option>
+                    <option value="Biru">Biru</option>
+                    <option value="Hijau">Hijau</option>
+                  </select>
+                  <div class="jersey-notif jok" style="font-size:10px;margin-top:3px"><i class="ti ti-check" style="font-size:9px"></i> OK</div>
+                </td>
+                <td><span class="b b-gy">L</span></td>
+                <td><span class="b b-am"><span class="sd sda"></span>Sementara</span></td>
+                <td class="td-formasi" style="display:none">
+                  <select class="formasi-sel" style="font-size:11px;padding:3px 5px;border-radius:5px;border:1px solid var(--bd);background:var(--su);font-family:var(--fn);max-width:68px">
+                    <option>GK</option><option>CB</option><option>RB</option><option>LB</option>
+                    <option>DMF</option><option>AMF</option><option>LMF</option><option>RMF</option>
+                    <option>CMF</option><option>CF</option><option>SS</option>
+                  </select>
+                </td>
+                <td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- BIAYA -->
+        <div id="trx-biaya" class="trx-p">
+          <div class="sec-lbl">Biaya match <button class="btn btn-sm" onclick="openModal('m-tambah-biaya')"><i class="ti ti-plus"></i> Tambah item biaya</button></div>
+          <table class="stbl">
+            <thead><tr><th>Item</th><th>Tipe</th><th>Rencana (Rp)</th><th>Realisasi (Rp)</th><th>Malik 60%</th><th>Filan 40%</th><th>Aksi</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:500">Sewa lapangan</td><td><span class="b b-gy">Ops</span></td><td>1.300.000</td><td>1.300.000</td><td>—</td><td>—</td><td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td></tr>
+              <tr><td style="font-weight:500">Wasit</td><td><span class="b b-gy">Ops</span></td><td>200.000</td><td>200.000</td><td>—</td><td>—</td><td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td></tr>
+              <tr><td style="font-weight:500">Air + laundry</td><td><span class="b b-gy">Ops</span></td><td>85.000</td><td>85.000</td><td>—</td><td>—</td><td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td></tr>
+              <tr><td style="font-weight:500">Gimmick voucher</td><td><span class="b b-gy">Ops</span></td><td>29.000</td><td>29.000</td><td>—</td><td>—</td><td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td></tr>
+            </tbody>
+            <tfoot><tr><td colspan="2">Total operasional</td><td>Rp 1.614.000</td><td style="color:var(--rd)">Rp 1.614.000</td><td colspan="3"></td></tr></tfoot>
+          </table>
+        </div>
+
+        <!-- DEPOSIT -->
+        <div id="trx-deposit" class="trx-p">
+          <div class="sec-lbl">Deposit player <button class="btn btn-sm" onclick="openModal('m-tambah-deposit')"><i class="ti ti-plus"></i> Tambah deposit</button></div>
+          <div style="padding:14px 16px">
+            <div class="dep-row">
+              <div style="font-weight:500;min-width:100px">Wayan</div>
+              <div style="font-size:14px;font-weight:700;color:var(--am);min-width:90px">Rp 70.000</div>
+              <div style="flex:1;font-size:11px;color:var(--mu)">Saldo aktif · dapat dipakai di match ini</div>
+              <div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div>
+            </div>
+            <div style="border-top:1px solid var(--bd);margin-top:14px;padding-top:14px">
+              <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Log transaksi deposit</div>
+              <table class="tbl">
+                <thead><tr><th>Tgl</th><th>Player</th><th>Jenis</th><th>Masuk (Rp)</th><th>Dipakai (Rp)</th><th>Saldo setelah</th><th>Match</th></tr></thead>
+                <tbody>
+                  <tr><td>Berbagai</td><td class="pri">Wayan</td><td><span class="b b-am">Cancel→Deposit</span></td><td style="color:var(--gn)">+70.000</td><td>—</td><td style="color:var(--am);font-weight:500">70.000</td><td>Berbagai</td></tr>
+                  <tr><td>15/08</td><td class="pri">Lana</td><td><span class="b b-am">Cancel→Deposit</span></td><td style="color:var(--gn)">+70.000</td><td style="color:var(--rd)">-70.000</td><td style="color:var(--mu)">0</td><td>15 Agust</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- GOAL SCORER -->
+        <div id="trx-gol" class="trx-p">
+          <div class="sec-lbl">Goal scorer — match ini <button class="btn btn-sm" onclick="openModal('m-tambah-gol')"><i class="ti ti-plus"></i> Tambah gol</button></div>
+          <div id="t-match-scorer"></div>
+          <div style="padding:14px 16px;border-top:1px solid var(--bd)">
+            <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Top skor all time</div>
+            <div id="t-alltime-scorer"></div>
+          </div>
+        </div>
+
+        <!-- REKAP AKHIR -->
+        <div id="trx-rekap" class="trx-p">
+          <div class="sec-lbl">Rekap akhir match — 6 September 2026</div>
+          <div class="rkg">
+            <div class="rkg-c"><div class="rkg-lbl">Total sales aktual</div><div class="rkg-val">Rp 1.863.500</div></div>
+            <div class="rkg-c"><div class="rkg-lbl">Total biaya operasional</div><div class="rkg-val" style="color:var(--rd)">Rp 1.614.000</div></div>
+            <div class="rkg-c hi"><div class="rkg-lbl" style="color:var(--gn)">Margin match</div><div class="rkg-val" style="color:var(--gn)">+Rp 249.500</div></div>
+            <div class="rkg-c"><div class="rkg-lbl">Split Malik (60%)</div><div class="rkg-val" style="color:var(--nv)">+Rp 149.700</div></div>
+            <div class="rkg-c"><div class="rkg-lbl">Split Filan (40%)</div><div class="rkg-val" style="color:var(--gn)">+Rp 99.800</div></div>
+            <div class="rkg-c"><div class="rkg-lbl">Top gol match ini</div><div class="rkg-val" style="font-size:13px">Jayadi <span class="gol-chip">⚽ 3 gol</span></div></div>
+          </div>
+          <div style="padding:14px 16px;border-top:1px solid var(--bd);background:var(--am2)">
+            <div style="font-size:12px;font-weight:500;color:var(--am);margin-bottom:4px"><i class="ti ti-lock"></i> Tutup match untuk mengunci semua transaksi</div>
+            <div style="font-size:11px;color:var(--am);margin-bottom:10px">Setelah ditutup, data tidak bisa diubah. PDF laporan digenerate otomatis.</div>
+            <button class="btn btn-dng" onclick="openModal('m-tutup-match')"><i class="ti ti-lock"></i> Tutup dan kunci match ini</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════ ADMIN ══════════════ -->
+<div id="page-admin" class="page">
+<div class="cont">
+  <div class="pg-hd">
+    <div><div class="pg-title">Admin</div><div class="pg-sub">Kelola stok jersey, SHTM, konfigurasi sistem</div></div>
+    <span class="b b-am" style="font-size:12px;padding:5px 10px"><i class="ti ti-lock" style="font-size:12px"></i> Akses terbatas</span>
+  </div>
+
+  <div class="in-tabs" style="background:var(--su);border:1px solid var(--bd);border-radius:12px 12px 0 0;padding:0 16px;margin-bottom:0">
+    <div class="in-tab active" onclick="adminTab('jersey',this)"><i class="ti ti-shirt" style="font-size:13px"></i> Stok jersey</div>
+    <div class="in-tab" onclick="adminTab('shtm',this)"><i class="ti ti-ticket" style="font-size:13px"></i> Daftar SHTM</div>
+    <div class="in-tab" onclick="adminTab('config',this)"><i class="ti ti-settings" style="font-size:13px"></i> Konfigurasi</div>
+    <div class="in-tab" onclick="adminTab('player',this)"><i class="ti ti-users" style="font-size:13px"></i> Kelola player</div>
+  </div>
+
+  <!-- JERSEY STOK -->
+  <div id="adm-jersey" class="tab-p active" style="background:var(--su);border:1px solid var(--bd);border-top:none;border-radius:0 0 12px 12px;padding:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:500">Stok jersey SMS — 4 tim · Field + GK</div>
+      <button class="btn btn-prim" onclick="openModal('m-tambah-stok')"><i class="ti ti-plus"></i> Tambah / update stok</button>
+    </div>
+    <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">Jersey Field</div>
+    <div class="jersey-grid">
+      <div class="jcard">
+        <div class="jcard-hd"><span class="jdot" style="background:#EF4444"></span>Tim Merah</div>
+        <div class="jrow"><span class="jlbl">M</span><div class="jstock"><div class="jbar"><div class="jbar-fill ok" style="width:100%;background:var(--gn)"></div></div><span class="jnum ok">2/2</span></div></div>
+        <div class="jrow"><span class="jlbl">L</span><div class="jstock"><div class="jbar"><div class="jbar-fill ok" style="width:66%;background:var(--gn)"></div></div><span class="jnum ok">2/3</span></div></div>
+        <div class="jrow"><span class="jlbl">XL</span><div class="jstock"><div class="jbar"><div class="jbar-fill zero" style="width:0%;background:var(--rd)"></div></div><span class="jnum zero">0/4 <i class="ti ti-alert-triangle" style="font-size:10px"></i></span></div></div>
+        <div class="jrow"><span class="jlbl">2XL</span><div class="jstock"><div class="jbar"><div class="jbar-fill ok" style="width:100%;background:var(--gn)"></div></div><span class="jnum ok">1/1</span></div></div>
+      </div>
+      <div class="jcard">
+        <div class="jcard-hd"><span class="jdot" style="background:#EAB308"></span>Tim Kuning</div>
+        <div class="jrow"><span class="jlbl">M</span><div class="jstock"><div class="jbar"><div class="jbar-fill ok" style="width:50%;background:var(--gn)"></div></div><span class="jnum ok">1/2</span></div></div>
+        <div class="jrow"><span class="jlbl">L</span><div class="jstock"><div class="jbar"><div class="jbar-fill ok" style="width:100%;background:var(--gn)"></div></div><span class="jnum ok">3/3</span></div></div>
+        <div class="jrow"><span class="jlbl">XL</span><div class="jstock"><div class="jbar"><div class="jbar-fill low" style="width:25%;background:var(--am)"></div></div><span class="jnum low">1/4 <i class="ti ti-alert-circle" style="font-size:10px"></i></span></div></div>
+        <div class="jrow"><span class="jlbl">2XL</span><div class="jstock"><div class="jbar"><div class="jbar-fill ok" style="width:100%;background:var(--gn)"></div></div><span class="jnum ok">1/1</span></div></div>
+      </div>
+      <div class="jcard">
+        <div class="jcard-hd"><span class="jdot" style="background:#3B82F6"></span>Tim Biru</div>
+        <div class="jrow"><span class="jlbl">M</span><div class="jstock"><div class="jbar"><div class="jbar-fill ok" style="width:100%;background:var(--gn)"></div></div><span class="jnum ok">2/2</span></div></div>
+        <div class="jrow"><span class="jlbl">L</span><div class="jstock"><div class="jbar"><div class="jbar-fill ok" style="width:100%;background:var(--gn)"></div></div><span class="jnum ok">3/3</span></div></div>
+        <div class="jrow"><span class="jlbl">XL</span><div class="jstock"><div class="jbar"><div class="jbar-fill ok" style="width:75%;background:var(--gn)"></div></div><span class="jnum ok">3/4</span></div></div>
+        <div class="jrow"><span class="jlbl">2XL</span><div class="jstock"><div class="jbar"><div class="jbar-fill ok" style="width:100%;background:var(--gn)"></div></div><span class="jnum ok">1/1</span></div></div>
+      </div>
+      <div class="jcard">
+        <div class="jcard-hd"><span class="jdot" style="background:#16A34A"></span>Tim Hijau</div>
+        <div class="jrow"><span class="jlbl">M</span><div class="jstock"><div class="jbar"><div class="jbar-fill ok" style="width:100%;background:var(--gn)"></div></div><span class="jnum ok">2/2</span></div></div>
+        <div class="jrow"><span class="jlbl">L</span><div class="jstock"><div class="jbar"><div class="jbar-fill low" style="width:33%;background:var(--am)"></div></div><span class="jnum low">1/3 <i class="ti ti-alert-circle" style="font-size:10px"></i></span></div></div>
+        <div class="jrow"><span class="jlbl">XL</span><div class="jstock"><div class="jbar"><div class="jbar-fill ok" style="width:100%;background:var(--gn)"></div></div><span class="jnum ok">4/4</span></div></div>
+        <div class="jrow"><span class="jlbl">2XL</span><div class="jstock"><div class="jbar"><div class="jbar-fill ok" style="width:100%;background:var(--gn)"></div></div><span class="jnum ok">1/1</span></div></div>
+      </div>
+    </div>
+    <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px;margin-top:4px">Jersey GK</div>
+    <div class="g3" style="margin-bottom:16px">
+      <div class="jcard"><div class="jcard-hd"><span class="jdot" style="background:var(--mu)"></span>GK · M</div><div class="jrow"><span class="jlbl">Stok</span><div class="jstock"><div class="jbar"><div class="jbar-fill ok" style="width:100%;background:var(--gn)"></div></div><span class="jnum ok">2/2</span></div></div></div>
+      <div class="jcard"><div class="jcard-hd"><span class="jdot" style="background:var(--mu)"></span>GK · L</div><div class="jrow"><span class="jlbl">Stok</span><div class="jstock"><div class="jbar"><div class="jbar-fill low" style="width:50%;background:var(--am)"></div></div><span class="jnum low">1/2</span></div></div></div>
+      <div class="jcard"><div class="jcard-hd"><span class="jdot" style="background:var(--mu)"></span>GK · XL</div><div class="jrow"><span class="jlbl">Stok</span><div class="jstock"><div class="jbar"><div class="jbar-fill ok" style="width:100%;background:var(--gn)"></div></div><span class="jnum ok">2/2</span></div></div></div>
+    </div>
+    <table class="tbl" style="margin-top:4px">
+      <thead><tr><th colspan="4" style="background:var(--su2);font-size:11px;color:var(--mu)">Jersey Pribadi (tidak dihitung stok)</th></tr>
+      <tr><th>Player</th><th>Jersey</th><th>Ukuran</th><th>Keterangan</th></tr></thead>
+      <tbody>
+        <tr><td class="pri">Bambang</td><td>SMS Merah · SMS Biru</td><td>XL</td><td>Milik sendiri</td></tr>
+        <tr><td class="pri">Filan</td><td>SMS Hijau</td><td>L</td><td>Milik sendiri</td></tr>
+        <tr><td class="pri">Bagus Suryo</td><td>SMS Hijau</td><td>2XL</td><td>Milik sendiri</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- DAFTAR SHTM -->
+  <div id="adm-shtm" class="tab-p" style="background:var(--su);border:1px solid var(--bd);border-top:none;border-radius:0 0 12px 12px;padding:16px;display:none">
+    <div style="margin-bottom:14px">
+      <div style="font-size:13px;font-weight:500;margin-bottom:4px">Daftar SHTM — Sistem Half-price Top Match</div>
+      <div style="font-size:12px;color:var(--mu)">Dicatat otomatis saat klik <strong>"SHTM Next ✓"</strong> di tab Slot Player pada match yang bersangkutan. Saat player hadir dan memakai SHTM di match berikutnya, kolom Tgl Dipakai terisi otomatis dan status berubah jadi Sudah dipakai.</div>
+    </div>
+
+    <!-- Tabel log SHTM -->
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th style="width:40px">No</th>
+          <th>Nama Player</th>
+          <th style="width:190px">Tgl Mendapat SHTM</th>
+          <th style="width:190px">Tgl SHTM Dipakai</th>
+          <th style="width:120px">Status</th>
+          <th style="width:80px">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#FFF5F5">
+          <td>1</td><td class="pri">Jayadi</td>
+          <td>6 Sept 2026</td><td style="color:var(--hi)">—</td>
+          <td><span class="b b-sh">Belum dipakai</span></td>
+          <td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td>
+        </tr>
+        <tr style="background:#FFF5F5">
+          <td>2</td><td class="pri">Ricky</td>
+          <td>28 Sept 2025</td><td style="color:var(--hi)">—</td>
+          <td><span class="b b-sh">Belum dipakai</span></td>
+          <td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td>
+        </tr>
+        <tr style="background:#FFF5F5">
+          <td>3</td><td class="pri">Adam Nh</td>
+          <td>3 Nov 2025</td><td style="color:var(--hi)">—</td>
+          <td><span class="b b-sh">Belum dipakai</span></td>
+          <td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td>
+        </tr>
+        <tr style="background:#FFF5F5">
+          <td>4</td><td class="pri">Wage</td>
+          <td>21 Des 2025</td><td style="color:var(--hi)">—</td>
+          <td><span class="b b-sh">Belum dipakai</span></td>
+          <td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td>
+        </tr>
+        <tr style="background:#FFF5F5">
+          <td>5</td><td class="pri">Rizal Angga</td>
+          <td>17 Mei 2026</td><td style="color:var(--hi)">—</td>
+          <td><span class="b b-sh">Belum dipakai</span></td>
+          <td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td>
+        </tr>
+        <tr>
+          <td>6</td><td class="pri">Chessa</td>
+          <td>14 Sept 2025</td><td>28 Sept 2025</td>
+          <td><span class="b b-gn">Sudah dipakai</span></td>
+          <td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button></div></td>
+        </tr>
+        <tr>
+          <td>7</td><td class="pri">Didik</td>
+          <td>12 Juli 2026</td><td>26 Juli 2026</td>
+          <td><span class="b b-gn">Sudah dipakai</span></td>
+          <td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button></div></td>
+        </tr>
+        <tr>
+          <td>8</td><td class="pri">Fauzan</td>
+          <td>26 Des 2025</td><td>11 Jan 2026</td>
+          <td><span class="b b-gn">Sudah dipakai</span></td>
+          <td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button></div></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="info info-ac" style="margin-top:12px">
+      <i class="ti ti-info-circle"></i>
+      <span>Alur otomatis: klik "SHTM Next ✓" di Slot Player → baris baru masuk ke tabel ini dengan Tgl Mendapat = tanggal match. Saat player hadir dan memakai SHTM di match berikutnya → Tgl SHTM Dipakai terisi otomatis dan status berubah jadi Sudah dipakai.</span>
+    </div>
+  </div>
+
+  <!-- KONFIGURASI -->
+  <div id="adm-config" class="tab-p" style="background:var(--su);border:1px solid var(--bd);border-top:none;border-radius:0 0 12px 12px;padding:16px;display:none">
+    <div class="g2f" style="max-width:500px">
+      <div class="fg"><div class="fl">HTM Player default (Rp)</div><input type="number" value="95000"></div>
+      <div class="fg"><div class="fl">HTM GK default (Rp)</div><input type="number" value="35000"></div>
+      <div class="fg"><div class="fl">HTM SHTM (Rp)</div><input type="number" value="50000"></div>
+      <div class="fg"><div class="fl">Split Malik (%)</div><input type="number" value="60"></div>
+    </div>
+    <button class="btn btn-prim" style="margin-top:4px"><i class="ti ti-check"></i> Simpan konfigurasi</button>
+  </div>
+
+  <!-- KELOLA PLAYER -->
+  <div id="adm-player" class="tab-p" style="background:var(--su);border:1px solid var(--bd);border-top:none;border-radius:0 0 12px 12px;padding:16px;display:none">
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <input type="text" placeholder="Cari nama player..." style="font-size:12px;padding:7px 10px;border-radius:var(--r);border:1px solid var(--bd);font-family:var(--fn);width:240px">
+      <button class="btn btn-prim"><i class="ti ti-user-plus"></i> Tambah player baru</button>
+    </div>
+    <table class="tbl">
+      <thead><tr><th>No</th><th>Nama</th><th>Alias</th><th>Kategori</th><th>Hadir</th><th>Last match</th><th>Deposit</th><th>SHTM</th><th>Aksi</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="pri">Malik</td><td>—</td><td><span class="b b-gy">SMS</span></td><td>40×</td><td>6 Sept</td><td>—</td><td>—</td><td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button></div></td></tr>
+        <tr style="background:#FFF5F5"><td>4</td><td class="pri">Ricky</td><td>—</td><td><span class="b b-gy">Umum</span></td><td>6×</td><td>6 Sept</td><td>—</td><td><span class="b b-sh">Belum dipakai</span></td><td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button></div></td></tr>
+        <tr style="background:var(--am2)"><td>5</td><td class="pri">Wayan</td><td>—</td><td><span class="b b-gy">Umum</span></td><td>8×</td><td>6 Sept</td><td style="color:var(--am);font-weight:500">Rp 70.000</td><td>—</td><td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button></div></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════ LOGIN ══════════════ -->
+<div id="page-login" class="page">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div style="display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:20px">
+        <div class="logo-ball"><i class="ti ti-ball-football"></i></div>
+        <div class="logo-txt" style="font-size:15px">Sobat Minisoccer</div>
+      </div>
+      <div style="font-size:16px;font-weight:600;text-align:center;margin-bottom:4px">Login admin</div>
+      <div style="font-size:12px;color:var(--mu);text-align:center;margin-bottom:20px">Akses Transaksi dan menu Admin</div>
+      <div class="fg"><div class="fl">Email</div><input type="email" placeholder="sobat.minisoccer@gmail.com"></div>
+      <div class="fg" style="margin-bottom:18px"><div class="fl">Password</div><input type="password" placeholder="••••••••"></div>
+      <button class="btn btn-prim" style="width:100%;justify-content:center;padding:9px"><i class="ti ti-login"></i> Masuk sebagai admin</button>
+      <div style="text-align:center;margin-top:12px"><a href="#" onclick="goPage('dashboard')" style="font-size:12px;color:var(--mu);text-decoration:none">← Kembali ke dashboard</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ MODALS ══════════════ -->
+
+<div id="m-db-player" class="modal-ov" onclick="bgClose(event,'m-db-player')">
+  <div class="modal modal-wide">
+    <div class="modal-hd"><div class="modal-title"><i class="ti ti-users" style="color:var(--ac)"></i> Database Player — 143 player</div><button class="ib" onclick="closeModal('m-db-player')"><i class="ti ti-x"></i></button></div>
+    <div class="modal-body" style="padding:0">
+      <div style="padding:10px 16px;border-bottom:1px solid var(--bd);display:flex;gap:8px">
+        <input type="text" placeholder="Cari nama..." style="flex:1;font-size:12px;padding:7px 10px;border-radius:var(--r);border:1px solid var(--bd);font-family:var(--fn)">
+        <select style="font-size:12px;padding:6px 10px;border-radius:var(--r);border:1px solid var(--bd);font-family:var(--fn)"><option>Semua kategori</option><option>SMS</option><option>BMR</option><option>Umum</option></select>
+      </div>
+      <table class="tbl">
+        <thead><tr><th>No</th><th>Nama</th><th>Kategori</th><th>Hadir</th><th>Last match</th><th>Jersey</th><th>Deposit</th><th>SHTM</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td class="pri">Malik</td><td><span class="b b-gy">SMS</span></td><td>40×</td><td>6 Sept</td><td>M</td><td>—</td><td>—</td></tr>
+          <tr><td>2</td><td class="pri">Filan</td><td><span class="b b-gy">SMS</span></td><td>37×</td><td>6 Sept</td><td>L</td><td>—</td><td>—</td></tr>
+          <tr style="background:#FFF5F5"><td>3</td><td class="pri">Ricky <span class="b b-sh" style="font-size:9px">SHTM</span></td><td><span class="b b-gy">Umum</span></td><td>6×</td><td>6 Sept</td><td>M</td><td>—</td><td><span class="b b-sh">Belum dipakai</span></td></tr>
+          <tr style="background:var(--am2)"><td>4</td><td class="pri">Wayan <span class="b b-dp" style="font-size:9px">Dep 70rb</span></td><td><span class="b b-gy">Umum</span></td><td>8×</td><td>6 Sept</td><td>L</td><td style="color:var(--am);font-weight:500">Rp 70.000</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-ft"><button class="btn" onclick="closeModal('m-db-player')">Tutup</button></div>
+  </div>
+</div>
+
+<!-- Modal: Match baru — tipe event sesuai permintaan -->
+<div id="m-match-baru" class="modal-ov" onclick="bgClose(event,'m-match-baru')">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-title"><i class="ti ti-calendar-plus" style="color:var(--ac)"></i> Buat match baru</div><button class="ib" onclick="closeModal('m-match-baru')"><i class="ti ti-x"></i></button></div>
+    <div class="modal-body">
+      <div class="g2f">
+        <div class="fg"><div class="fl">Tanggal match</div><input type="date" value="2026-09-20"></div>
+        <div class="fg"><div class="fl">Jenis game</div>
+          <select onchange="setGameMode(this.value==='Football (11 vs 11)'?'football':'mini')">
+            <option>Minisoccer (7 vs 7)</option>
+            <option>Football (11 vs 11)</option>
+          </select>
+        </div>
+        <div class="fg" style="grid-column:span 2"><div class="fl">Venue (nama lapangan)</div><input type="text" placeholder="Contoh: Futsal Menteng, Blok M Square Lt.3"></div>
+        <div class="fg"><div class="fl">Tipe lapangan</div><select><option>Kecil</option><option>Besar</option></select></div>
+        <div class="fg"><div class="fl">Tipe event</div>
+          <!-- Internal = SMS atau BIG, Join Game, Sparing Eksternal -->
+          <select>
+            <option>Internal</option>
+            <option>Join Game</option>
+            <option>Sparing Eksternal</option>
+          </select>
+        </div>
+        <div class="fg"><div class="fl">HTM Player (Rp)</div><input type="number" value="95000"></div>
+        <div class="fg"><div class="fl">HTM GK (Rp)</div><input type="number" value="35000"></div>
+        <div class="fg"><div class="fl">Kuota Kiper (GK)</div><input type="number" value="4" min="1" placeholder="mis. 4"></div>
+        <div class="fg"><div class="fl">Kuota Field (Player)</div><input type="number" value="24" min="1" placeholder="mis. 24"></div>
+      </div>
+    </div>
+    <div class="modal-ft"><button class="btn" onclick="closeModal('m-match-baru')">Batal</button><button class="btn btn-prim"><i class="ti ti-check"></i> Buat match</button></div>
+  </div>
+</div>
+
+<div id="m-tutup-match" class="modal-ov" onclick="bgClose(event,'m-tutup-match')">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-title"><i class="ti ti-lock" style="color:var(--rd)"></i> Tutup match</div><button class="ib" onclick="closeModal('m-tutup-match')"><i class="ti ti-x"></i></button></div>
+    <div class="modal-body">
+      <div class="info info-am" style="margin-bottom:12px"><i class="ti ti-alert-triangle"></i> Setelah ditutup, semua transaksi dikunci dan tidak bisa diubah.</div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;padding:7px 10px;background:var(--su2);border-radius:var(--r)"><span style="color:var(--mu)">Total sales</span><span style="font-weight:600">Rp 1.863.500</span></div>
+        <div style="display:flex;justify-content:space-between;padding:7px 10px;background:var(--su2);border-radius:var(--r)"><span style="color:var(--mu)">Total cost</span><span style="font-weight:600;color:var(--rd)">Rp 1.614.000</span></div>
+        <div style="display:flex;justify-content:space-between;padding:7px 10px;background:var(--gn2);border-radius:var(--r)"><span style="color:var(--gn)">Margin</span><span style="font-weight:700;color:var(--gn)">+Rp 249.500</span></div>
+        <div style="display:flex;justify-content:space-between;padding:7px 10px;background:var(--am2);border-radius:var(--r)"><span style="color:var(--am)">Status bayar</span><span style="font-weight:600;color:var(--am)">1 masih Sementara ⚠</span></div>
+      </div>
+      <div class="info info-gn"><i class="ti ti-file-text"></i> PDF laporan otomatis digenerate setelah match ditutup.</div>
+    </div>
+    <div class="modal-ft"><button class="btn" onclick="closeModal('m-tutup-match')">Batal</button><button class="btn btn-dng"><i class="ti ti-lock"></i> Ya, tutup match</button></div>
+  </div>
+</div>
+
+<div id="m-tambah-player" class="modal-ov" onclick="bgClose(event,'m-tambah-player')">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-title"><i class="ti ti-user-plus" style="color:var(--ac)"></i> Tambah player / walk-in</div><button class="ib" onclick="closeModal('m-tambah-player')"><i class="ti ti-x"></i></button></div>
+    <div class="modal-body">
+      <div class="fg"><div class="fl">Cari nama player (autocomplete dari DB)</div><input type="text" placeholder="Ketik nama..."></div>
+      <div class="g2f">
+        <div class="fg"><div class="fl">HTM (Rp)</div><input type="number" value="95000"></div>
+        <div class="fg"><div class="fl">Label harga</div><select><option>Normal</option><option>SHTM (50rb)</option><option>Promo</option><option>Free</option><option>Sponsor</option></select></div>
+        <div class="fg"><div class="fl">Posisi</div><select><option>Field</option><option>GK</option></select></div>
+        <div class="fg"><div class="fl">Jersey warna</div><select><option>Merah SMS</option><option>Kuning SMS</option><option>Biru SMS</option><option>Hijau SMS</option><option>Pribadi</option></select></div>
+        <div class="fg"><div class="fl">Ukuran jersey</div><select><option>M</option><option>L</option><option>XL</option><option>2XL</option></select></div>
+        <div class="fg"><div class="fl">Status</div><select><option>Sementara</option><option>Lunas</option><option>Walk-in</option></select></div>
+        <div class="fg"><div class="fl">Metode bayar</div><select><option value="">— (belum/sementara)</option><option>BCA</option><option>BSI</option><option>Mandiri</option><option>BRI</option><option>BNI</option><option>Cash</option><option>Deposit</option></select></div>
+        <div class="fg"><div class="fl">Jumlah bayar (Rp)</div><input type="number" placeholder="0"></div>
+      </div>
+      <!-- Tim tidak ada di form — diisi di tabel slot setelah player masuk -->
+      <div class="info info-ac"><i class="ti ti-info-circle"></i> Tim diisi langsung di tabel slot setelah player ditambahkan. Jika player punya deposit aktif, akan otomatis tercantum.</div>
+    </div>
+    <div class="modal-ft"><button class="btn" onclick="closeModal('m-tambah-player')">Batal</button><button class="btn btn-prim"><i class="ti ti-check"></i> Tambah player</button></div>
+  </div>
+</div>
+
+<div id="m-tambah-biaya" class="modal-ov" onclick="bgClose(event,'m-tambah-biaya')">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-title"><i class="ti ti-receipt" style="color:var(--ac)"></i> Tambah item biaya</div><button class="ib" onclick="closeModal('m-tambah-biaya')"><i class="ti ti-x"></i></button></div>
+    <div class="modal-body">
+      <div class="fg"><div class="fl">Nama item</div><input type="text" placeholder="Sewa lapangan, wasit, laundry..."></div>
+      <div class="g2f">
+        <div class="fg"><div class="fl">Kategori</div><select><option>Lapangan</option><option>Wasit</option><option>Air</option><option>Laundry</option><option>Gimmick</option><option>Konsumsi</option><option>Inventaris</option><option>Lainnya</option></select></div>
+        <div class="fg"><div class="fl">Tipe pembebanan</div>
+          <select id="sel-tipe" onchange="document.getElementById('inv-opts').style.display=this.value==='Inventaris'?'block':'none'">
+            <option>Operasional</option><option>Inventaris</option>
+          </select>
+        </div>
+        <div class="fg"><div class="fl">Rencana (Rp)</div><input type="number" placeholder="0"></div>
+        <div class="fg"><div class="fl">Realisasi (Rp)</div><input type="number" placeholder="0"></div>
+      </div>
+      <div id="inv-opts" style="display:none">
+        <div class="info info-pu" style="margin-bottom:10px"><i class="ti ti-info-circle"></i> Inventaris langsung potong kumulatif Malik 60% dan Filan 40%, tidak masuk margin match.</div>
+        <div class="g2f">
+          <div class="fg"><div class="fl">Skema</div><select><option>Langsung</option><option>Cicilan</option></select></div>
+          <div class="fg"><div class="fl">Jumlah cicilan</div><input type="number" placeholder="mis. 12"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft"><button class="btn" onclick="closeModal('m-tambah-biaya')">Batal</button><button class="btn btn-prim"><i class="ti ti-check"></i> Simpan</button></div>
+  </div>
+</div>
+
+<div id="m-tambah-deposit" class="modal-ov" onclick="bgClose(event,'m-tambah-deposit')">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-title"><i class="ti ti-wallet" style="color:var(--am)"></i> Tambah deposit player</div><button class="ib" onclick="closeModal('m-tambah-deposit')"><i class="ti ti-x"></i></button></div>
+    <div class="modal-body">
+      <div class="g2f">
+        <div class="fg"><div class="fl">Player</div><input type="text" placeholder="Cari nama player..."></div>
+        <div class="fg"><div class="fl">Jumlah (Rp)</div><input type="number" placeholder="mis. 95000"></div>
+        <div class="fg"><div class="fl">Sumber</div><select><option>Cancel → Deposit</option><option>Kelebihan bayar</option><option>Sponsor credit</option></select></div>
+        <div class="fg"><div class="fl">Keterangan</div><input type="text" placeholder="opsional"></div>
+      </div>
+      <div class="info info-am"><i class="ti ti-info-circle"></i> Saldo berkurang otomatis saat player memilih metode "Deposit" di tab Slot Player.</div>
+    </div>
+    <div class="modal-ft"><button class="btn" onclick="closeModal('m-tambah-deposit')">Batal</button><button class="btn btn-prim"><i class="ti ti-check"></i> Simpan</button></div>
+  </div>
+</div>
+
+<div id="m-tambah-gol" class="modal-ov" onclick="bgClose(event,'m-tambah-gol')">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-title"><i class="ti ti-ball-football" style="color:var(--gn)"></i> Tambah gol</div><button class="ib" onclick="closeModal('m-tambah-gol')"><i class="ti ti-x"></i></button></div>
+    <div class="modal-body">
+      <div class="fg"><div class="fl">Pencetak gol (player match ini)</div>
+        <select><option value="">Pilih player...</option><option>Malik (GK · Tim 1)</option><option>Ricky (Field · Tim 1)</option><option>Wayan (Field · Tim 1)</option><option>Jayadi (Field · Tim 1)</option><option>Heru (Field · Tim 2)</option></select>
+      </div>
+      <div class="fg"><div class="fl">Jumlah gol di match ini</div><input type="number" min="1" value="1"></div>
+      <div class="fg"><div class="fl">Keterangan (opsional)</div><input type="text" placeholder="mis. gol di babak kedua"></div>
+      <div class="info info-gn"><i class="ti ti-chart-bar"></i> Gol direkap ke top skor all time setelah match ditutup.</div>
+    </div>
+    <div class="modal-ft"><button class="btn" onclick="closeModal('m-tambah-gol')">Batal</button><button class="btn btn-prim"><i class="ti ti-check"></i> Simpan gol</button></div>
+  </div>
+</div>
+
+<div id="m-tambah-stok" class="modal-ov" onclick="bgClose(event,'m-tambah-stok')">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-title"><i class="ti ti-shirt" style="color:var(--ac)"></i> Tambah / update stok jersey</div><button class="ib" onclick="closeModal('m-tambah-stok')"><i class="ti ti-x"></i></button></div>
+    <div class="modal-body">
+      <div class="info info-am" style="margin-bottom:12px"><i class="ti ti-info-circle"></i> Bisa menambah stok jersey yang sudah ada, atau mendaftarkan warna jersey baru yang belum ada di sistem.</div>
+      <div class="g2f">
+        <div class="fg">
+          <div class="fl">Warna jersey</div>
+          <input type="text" placeholder="Merah / Kuning / Biru / Hijau / dll" list="warna-list">
+          <datalist id="warna-list">
+            <option>Merah</option><option>Kuning</option><option>Biru</option><option>Hijau</option>
+            <option>Putih</option><option>Hitam</option><option>Oranye</option><option>Abu-abu</option>
+          </datalist>
+        </div>
+        <div class="fg"><div class="fl">Tipe jersey</div><select><option>Field</option><option>GK</option></select></div>
+        <div class="fg"><div class="fl">Ukuran</div><select><option>M</option><option>L</option><option>XL</option><option>2XL</option><option>3XL</option><option>S</option></select></div>
+        <div class="fg"><div class="fl">Jumlah unit (ditambahkan)</div><input type="number" min="1" value="1" placeholder="Berapa unit baru?"></div>
+        <div class="fg" style="grid-column:span 2"><div class="fl">Keterangan (opsional)</div><input type="text" placeholder="mis. beli 2 jersey Merah XL baru, atau ganti warna Ungu L"></div>
+      </div>
+      <div class="info info-ac"><i class="ti ti-info-circle"></i> Jika warna belum ada → jersey baru didaftarkan ke sistem. Jika sudah ada → stok bertambah. Perubahan langsung tercermin di notifikasi ketersediaan saat input player.</div>
+    </div>
+    <div class="modal-ft"><button class="btn" onclick="closeModal('m-tambah-stok')">Batal</button><button class="btn btn-prim"><i class="ti ti-check"></i> Simpan stok</button></div>
+  </div>
+</div>
+
+
+
+<!-- M: Line Up View per warna jersey -->
+<div id="m-lineup-view" class="modal-ov" onclick="bgClose(event,'m-lineup-view')">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-hd">
+      <div class="modal-title"><i class="ti ti-layout-grid" style="color:var(--ac)"></i> Line up berdasarkan warna jersey</div>
+      <button class="ib" onclick="closeModal('m-lineup-view')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body" style="padding:14px" id="lineup-view-body">
+      <!-- Di-generate oleh JS saat modal dibuka -->
+    </div>
+    <div class="modal-ft">
+      <button class="btn" onclick="closeModal('m-lineup-view')">Tutup</button>
+      <button class="btn btn-prim" onclick="closeModal('m-lineup-view');openModal('m-broadcast')">
+        <i class="ti ti-broadcast"></i> Lanjut generate broadcast
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- M: Generate Broadcast -->
+<div id="m-broadcast" class="modal-ov" onclick="bgClose(event,'m-broadcast')">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-hd">
+      <div class="modal-title"><i class="ti ti-broadcast" style="color:var(--gn)"></i> Generate broadcast lineup</div>
+      <button class="ib" onclick="closeModal('m-broadcast')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body" style="padding:14px">
+
+      <!-- Isian metadata match -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div class="fg" style="margin-bottom:0">
+          <div class="fl">Nama venue</div>
+          <input type="text" id="bc-venue" value="Halftime Minisoccer" placeholder="Halftime Minisoccer">
+        </div>
+        <div class="fg" style="margin-bottom:0">
+          <div class="fl">Link maps</div>
+          <input type="text" id="bc-maps" value="https://maps.app.goo.gl/Vd7oX1u15pSd4GZU8" placeholder="https://maps.app.goo.gl/...">
+        </div>
+        <div class="fg" style="margin-bottom:0">
+          <div class="fl">Hari & tanggal</div>
+          <input type="text" id="bc-tanggal" value="Minggu, 6 September 2026">
+        </div>
+        <div class="fg" style="margin-bottom:0">
+          <div class="fl">Jam main</div>
+          <input type="text" id="bc-jam" value="15.30 - 18.00 (GAME SORE)">
+        </div>
+        <div class="fg" style="margin-bottom:0">
+          <div class="fl">Prakiraan cuaca</div>
+          <input type="text" id="bc-cuaca" value="⛅ Hangat Menyengat">
+        </div>
+        <div class="fg" style="margin-bottom:0">
+          <div class="fl">Match ke-</div>
+          <input type="number" id="bc-matchno" value="39" min="1">
+        </div>
+      </div>
+
+      <!-- Preview teks -->
+      <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Preview broadcast</div>
+      <textarea id="bc-preview" readonly
+        style="width:100%;height:340px;font-size:12px;font-family:monospace;padding:10px;border:1px solid var(--bd);border-radius:var(--r);background:var(--su2);color:var(--tx);resize:vertical;line-height:1.6"></textarea>
+
+      <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+        <button class="btn" style="font-size:12px" onclick="genBroadcast()">
+          <i class="ti ti-refresh"></i> Refresh preview
+        </button>
+        <button class="btn btn-prim" onclick="copyBroadcast()">
+          <i class="ti ti-copy"></i> Salin teks
+        </button>
+        <span id="bc-copy-ok" style="font-size:11px;color:var(--gn);display:none"><i class="ti ti-check"></i> Tersalin!</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SHTM Toast notification -->
+<div id="shtm-toast" style="position:fixed;bottom:24px;right:24px;z-index:999;display:none">
+  <div style="background:var(--nv);color:#fff;border-radius:10px;padding:12px 16px;font-size:12px;max-width:300px;box-shadow:0 4px 16px rgba(0,0,0,.25)">
+    <div style="font-weight:600;margin-bottom:3px"><i class="ti ti-ticket"></i> SHTM dicatat!</div>
+    <div id="toast-msg" style="opacity:.85">Jayadi mendapat SHTM pada 6 Sept 2026. Tercatat di Admin → Daftar SHTM.</div>
+  </div>
+</div>
+
+<!-- ══════════════ SCRIPT ══════════════ -->
+<script>
+const MD={
+  l12:['12J','26J','30M','17M','1M','15F','12A','16J','11J','6D','21D','26D'],
+  d12:[243,489,187,163,201,135,-98,243,102,287,144,229],
+  l24:['28S','3N','23N','6D','21D','26D','11J','16J','12A','15F','1M','17M','30M','27J','12J','26J','15A','6S'],
+  d24:[87,-45,112,287,144,229,102,243,135,-98,201,163,187,489,243,489,201,249],
+  l44:Array.from({length:44},(_,i)=>'M'+(i+1)),
+  d44:[120,80,150,-60,200,180,90,110,75,-80,160,130,100,200,85,95,110,140,87,-45,112,287,144,229,102,243,135,-98,201,163,187,489,243,489,201,249,145,87,60,243,201,87,163,249]
+};
+const SCORERS=[
+  {rank:'🥇',name:'Jayadi',cat:'Umum',gol:34,pct:100},
+  {rank:'🥈',name:'Annas',cat:'BMR',gol:28,pct:82},
+  {rank:'🥉',name:'Hisyam',cat:'SMS',gol:24,pct:70},
+  {rank:'4',name:'Tavano',cat:'Umum',gol:21,pct:62},
+  {rank:'5',name:'Bambang',cat:'Umum',gol:19,pct:56},
+  {rank:'6',name:'Eri',cat:'SMS',gol:16,pct:47},
+  {rank:'7',name:'Wira',cat:'Umum',gol:13,pct:38},
+];
+const MATCH_SCORERS=[{rank:1,name:'Jayadi',gol:3,pct:100},{rank:2,name:'Ricky',gol:2,pct:67},{rank:3,name:'Wayan',gol:1,pct:33}];
+
+// Lapangan data per tipe
+  // mini = Minisoccer (7v7) | foot = Football (11v11)
+  // Filter chips: semua, internal, join, sparing
+  const LAP_DATA = {
+  semua: {
+    mini: [187,210,165,243,198,178,221,189,204,231,267,249],
+    foot: [312,289,0,489,0,0,383,0,0,0,0,0]
+  },
+  internal: {
+    mini: [187,210,165,243,198,178,221,189,204,231,267,249],
+    foot: [312,289,0,489,0,0,383,0,0,0,0,0]
+  },
+  join: {
+    mini: [45,0,32,0,0,0,0,55,0,40,0,0],
+    foot: [0,0,0,0,0,0,0,0,0,0,0,0]
+  },
+  sparing: {
+    mini: [0,0,0,0,22,0,0,0,0,0,0,0],
+    foot: [0,0,0,0,0,0,0,0,0,0,0,0]
+  }
+};
+const LAP_LABELS=['Okt–Des\'23','Jan–Mar\'24','Apr–Jun\'24','Jul–Sep\'24','Okt–Des\'24','Jan–Mar\'25','Apr–Jun\'25','Jul–Sep\'25','Okt–Des\'25','Jan–Mar\'26','Apr–Jun\'26','Jul–Sep\'26'];
+
+let ci=null, cRpt=null, cLap=null;
+
+function mkLine(id,lbl,dat){
+  const el=document.getElementById(id);if(!el)return null;
+  const cols=dat.map(v=>v>0?'#16A34A':v<0?'#DC2626':'#888780');
+  return new Chart(el,{type:'line',data:{labels:lbl,datasets:[{data:dat,segment:{borderColor:c=>c.p0.parsed.y>=0?'#16A34A':'#DC2626'},pointBackgroundColor:cols,pointRadius:3,borderWidth:2,tension:.25,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const v=c.raw;return (v>0?'+':'')+Math.round(v)+'k (Rp '+(Math.abs(v)*1000).toLocaleString('id-ID')+')';}}}},scales:{x:{ticks:{font:{size:9},color:'#A8A8A4'},grid:{display:false}},y:{ticks:{font:{size:9},callback:v=>(v>=0?'+':'')+Math.round(v)+'k'},grid:{color:'#E4E4E0'}}}}});
+}
+
+function mkLapChart(kecil,besar){ // kecil=Minisoccer, besar=Football
+  const el=document.getElementById('chartLapangan');if(!el)return;
+  if(cLap){cLap.destroy();cLap=null;}
+  cLap=new Chart(el,{type:'bar',data:{labels:LAP_LABELS,datasets:[
+    {label:'Minisoccer',data:kecil,backgroundColor:'#1F4E79',borderRadius:3},
+    {label:'Football',data:besar,backgroundColor:'#16A34A',borderRadius:3}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': Rp '+Math.round(c.raw)+'k'}}},scales:{x:{ticks:{font:{size:9},color:'#A8A8A4'},grid:{display:false}},y:{ticks:{font:{size:9},callback:v=>Math.round(v)+'k'},grid:{color:'#E4E4E0'}}}}});
+}
+
+function filterTipe(tipe,btn){
+  document.querySelectorAll('#page-dashboard .chips .chip').forEach(c=>{
+    // Hanya chip di card lapangan
+    if(c.closest('.card')===btn.closest('.card'))c.classList.remove('active');
+  });
+  btn.classList.add('active');
+  const d=LAP_DATA[tipe]||LAP_DATA.semua;
+  mkLapChart(d.mini,d.foot);
+}
+
+function initCharts(){
+  if(ci){ci.destroy();ci=null;}
+  ci=mkLine('chartMargin',MD.l12,MD.d12);
+  mkLapChart(LAP_DATA.semua.mini,LAP_DATA.semua.foot);
+}
+
+function switchChart(n,btn){
+  document.querySelectorAll('#page-dashboard .chips .chip').forEach(c=>{
+    // Hanya chip di card margin
+    if(c.closest('.card')===btn.closest('.card'))c.classList.remove('active');
+  });
+  btn.classList.add('active');
+  const k=n<=12?'12':n<=24?'24':'44';
+  if(ci)ci.destroy();
+  ci=mkLine('chartMargin',MD['l'+k],MD['d'+k]);
+}
+
+function renderScorer(id,data){
+  const el=document.getElementById(id);if(!el)return;
+  el.innerHTML=data.map(s=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 14px;border-bottom:1px solid var(--bd)"><div style="font-size:12px;font-weight:700;min-width:24px;text-align:center">${s.rank}</div><div style="font-size:12px;font-weight:500;flex:0 0 82px">${s.name}</div>${s.cat?`<div style="font-size:10px;color:var(--mu);flex:0 0 36px">${s.cat}</div>`:'<div style="flex:0 0 36px"></div>'}<div style="flex:1;height:6px;background:var(--su2);border-radius:3px;overflow:hidden"><div style="width:${s.pct}%;height:100%;background:var(--nv);border-radius:3px"></div></div><div style="font-size:12px;font-weight:700;color:var(--nv);min-width:50px;text-align:right">${s.gol} gol</div></div>`).join('');
+}
+
+function goPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const t=document.getElementById('ntab-'+id);if(t)t.classList.add('active');
+  if(id==='dashboard')setTimeout(initCharts,60);
+  if(id==='reporting')setTimeout(()=>{if(cRpt)cRpt.destroy();cRpt=mkLine('chartRptMargin',MD.l24,MD.d24);},60);
+}
+function rptTab(id,btn){
+  document.querySelectorAll('#page-reporting .tab-p').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('#page-reporting .in-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('rpt-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(id==='margin')setTimeout(()=>{if(cRpt)cRpt.destroy();cRpt=mkLine('chartRptMargin',MD.l24,MD.d24);},60);
+}
+function trxTab(id,btn){
+  document.querySelectorAll('.trx-p').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.trx-st').forEach(t=>t.classList.remove('active'));
+  document.getElementById('trx-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+}
+function adminTab(id,btn){
+  ['adm-jersey','adm-shtm','adm-config','adm-player'].forEach(i=>{
+    const el=document.getElementById(i);if(el)el.style.display='none';
+    el&&el.classList.remove('active');
+  });
+  document.querySelectorAll('#page-admin .in-tab').forEach(t=>t.classList.remove('active'));
+  const el=document.getElementById('adm-'+id);
+  if(el){el.style.display='block';el.classList.add('active');}
+  if(btn)btn.classList.add('active');
+}
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+function bgClose(e,id){if(e.target===document.getElementById(id))closeModal(id)}
+
+// SHTM flag toggle — saat diklik, catat ke admin
+function toggleSf(btn,nama,matchDate){
+  const on=btn.classList.contains('sf-on');
+  if(on){
+    btn.classList.replace('sf-on','sf-off');
+    btn.innerHTML='<i class="ti ti-ticket" style="font-size:9px"></i> Next';
+  }else{
+    btn.classList.replace('sf-off','sf-on');
+    btn.innerHTML='<i class="ti ti-ticket" style="font-size:9px"></i> SHTM Next ✓';
+    // Tampilkan toast notifikasi
+    document.getElementById('toast-msg').textContent=nama+' mendapat SHTM pada '+matchDate+'. Tercatat di Admin → Daftar SHTM.';
+    const toast=document.getElementById('shtm-toast');
+    toast.style.display='block';
+    setTimeout(()=>{toast.style.display='none';},3500);
+  }
+}
+
+// INIT
+renderScorer('d-scorer',SCORERS);
+renderScorer('t-match-scorer',MATCH_SCORERS.map(s=>({...s,cat:''})));
+renderScorer('t-alltime-scorer',SCORERS);
+setTimeout(initCharts,150);
+
+// ── BROADCAST GENERATOR ──
+// Data lineup mock — di sistem nyata ini dari state aktif match
+const LINEUP = {
+  'Hijau': {
+    emoji: '💚',
+    gk:   [{nama:'Airlangga', uk:'L'}],
+    field:[{nama:'Fugo Airlangga',uk:'L'},{nama:'Algo Airlangga',uk:'L'},{nama:'Indra Airlangga',uk:'L'},
+           {nama:'Rafi F Airlangga',uk:'M'},{nama:'Hamzah Airlangga',uk:'M'},{nama:'Piko Airlangga',uk:'XL'}]
+  },
+  'Biru': {
+    emoji: '💙',
+    gk:   [{nama:'Tavano', uk:'M'}],
+    field:[{nama:'Filan',uk:'L'},{nama:'Heru',uk:'L'},{nama:'Jefri',uk:'L'},
+           {nama:'Ikhwan',uk:'XL'},{nama:'Wira',uk:'XL'},{nama:'Malik',uk:'M'}]
+  },
+  'Kuning': {
+    emoji: '💛',
+    gk:   [{nama:'Syarif', uk:'XL'}],
+    field:[{nama:'M Chu',uk:'L'},{nama:'Fuad',uk:'XL'},{nama:'Haidar Airlangga',uk:'L'},
+           {nama:'Egi',uk:'M'},{nama:'Bryan',uk:'L'},{nama:'Yogi',uk:'XL'}]
+  },
+  'Merah': {
+    emoji: '❤️',
+    gk:   [{nama:'Anas', uk:'M'}],
+    field:[{nama:'Adib',uk:'XL'},{nama:'Fauzan',uk:'XL'},{nama:'Ibnu',uk:'L'},
+           {nama:'Annas',uk:'XL'},{nama:'Julius',uk:'XXL'},{nama:'Ridwan',uk:'M'}]
+  }
+};
+
+const CATATAN = `⚠️ Please Note
+1. Cek list nama dalam line up, jika ada yang beda silakan konfirmasi.
+2. Budayakan ontime, jam 15.45 sudah ready
+3. Be friendly, main dengan siapa aja dan bicarakan posisi baik-baik karena maen barengan.
+4. PURE HAPPY & HAHA HIHI, dilarang main keras dan kasar.
+5. Segala bentuk cedera merupakan tanggung jawab pribadi.
+6. Doorprize diundi di akhir game.
+7. Jangan lupa bawa botol minum.
+#SobatMinisoccer`;
+
+function genBroadcast() {
+  const venue   = document.getElementById('bc-venue').value.trim();
+  const maps    = document.getElementById('bc-maps').value.trim();
+  const tgl     = document.getElementById('bc-tanggal').value.trim();
+  const jam     = document.getElementById('bc-jam').value.trim();
+  const cuaca   = document.getElementById('bc-cuaca').value.trim();
+  const matchno = document.getElementById('bc-matchno').value.trim();
+
+  let txt = `🌟 Line Up Matchday ${matchno} 🌟\n`;
+  txt += `🏟️ : ${venue}\n`;
+  if(maps) txt += `${maps}\n`;
+  txt += `🗓️ : ${tgl}\n`;
+  txt += `⏰  : ${jam}\n`;
+  txt += `Prakiraan Cuaca Gameday\n`;
+  txt += `${cuaca}\n\n`;
+
+  // Tim per warna
+  const urutan = ['Hijau','Biru','Kuning','Merah'];
+  urutan.forEach(warna => {
+    const tim = LINEUP[warna];
+    if(!tim) return;
+    txt += `${tim.emoji} ${warna} SMS\n`;
+    tim.gk.forEach(p => {
+      txt += `(GK) ${p.nama} - ${p.uk}\n`;
+    });
+    tim.field.forEach((p, i) => {
+      txt += `${i+1} ${p.nama} - ${p.uk}\n`;
+    });
+    txt += '\n';
+  });
+
+  txt += CATATAN;
+  document.getElementById('bc-preview').value = txt;
+}
+
+function copyBroadcast() {
+  const ta = document.getElementById('bc-preview');
+  ta.select();
+  ta.setSelectionRange(0, 99999);
+  try {
+    navigator.clipboard.writeText(ta.value).then(() => {
+      showCopyOk();
+    }).catch(() => {
+      document.execCommand('copy');
+      showCopyOk();
+    });
+  } catch(e) {
+    document.execCommand('copy');
+    showCopyOk();
+  }
+}
+
+function showCopyOk() {
+  const el = document.getElementById('bc-copy-ok');
+  el.style.display = 'inline';
+  setTimeout(() => { el.style.display = 'none'; }, 2000);
+}
+
+// openModal override sudah di bawah (jersey + lineup view)
+
+
+// ── STOK JERSEY (mock) ──
+const JERSEY_STOK = {
+  'Merah': { M:2, L:2, XL:0, '2XL':1 },
+  'Kuning': { M:1, L:3, XL:1, '2XL':1 },
+  'Biru':   { M:2, L:3, XL:3, '2XL':1 },
+  'Hijau':  { M:2, L:1, XL:4, '2XL':1 },
+};
+
+// Warna jersey yang sedang dipakai field players (untuk filter GK)
+function getWarnaTerpakai() {
+  const sels = document.querySelectorAll('.jersey-sel[data-posisi="field"]');
+  const set = new Set();
+  sels.forEach(s => { if(s.value) set.add(s.value); });
+  return [...set];
+}
+
+// Saat jersey dropdown berubah
+function onJerseyChange(sel) {
+  const warna = sel.value;
+  const notif = sel.nextElementSibling;
+  const posisi = sel.dataset.posisi;
+
+  // Kalau GK: rebuild options sesuai warna yang dipakai field
+  if(posisi === 'gk') {
+    updateGkOptions(sel);
+    return;
+  }
+
+  // Update notifikasi
+  if(!warna) {
+    notif.innerHTML = '';
+    notif.className = 'jersey-notif';
+  } else {
+    const stok = JERSEY_STOK[warna];
+    const total = stok ? Object.values(stok).reduce((a,b)=>a+b,0) : 0;
+    if(total > 0) {
+      notif.innerHTML = '<i class="ti ti-check" style="font-size:9px"></i> OK';
+      notif.className = 'jersey-notif jok';
+    } else {
+      notif.innerHTML = '<i class="ti ti-alert-triangle" style="font-size:9px"></i> Habis!';
+      notif.className = 'jersey-notif jwarn';
+    }
+  }
+
+  // Setelah field jersey berubah, rebuild semua GK dropdown
+  document.querySelectorAll('.jersey-sel[data-posisi="gk"]').forEach(gkSel => {
+    updateGkOptions(gkSel);
+  });
+}
+
+// Update GK dropdown: hanya tampilkan warna yang dipakai field players
+function updateGkOptions(gkSel) {
+  const warnaTerpakai = getWarnaTerpakai();
+  const currentVal = gkSel.value;
+  const notif = gkSel.nextElementSibling;
+
+  // Rebuild options
+  let html = '<option value="">— pilih</option>';
+  if(warnaTerpakai.length === 0) {
+    // Kalau belum ada field yang pilih, tampilkan semua
+    ['Merah','Kuning','Biru','Hijau'].forEach(w => {
+      html += `<option value="${w}"${currentVal===w?' selected':''}>${w}</option>`;
+    });
+  } else {
+    warnaTerpakai.forEach(w => {
+      html += `<option value="${w}"${currentVal===w?' selected':''}>${w}</option>`;
+    });
+  }
+  gkSel.innerHTML = html;
+
+  // Kalau nilai lama sudah tidak tersedia di pilihan baru, clear
+  if(currentVal && !warnaTerpakai.includes(currentVal) && warnaTerpakai.length > 0) {
+    gkSel.value = '';
+    notif.innerHTML = '';
+    notif.className = 'jersey-notif';
+    return;
+  }
+
+  // Update notifikasi
+  const selectedWarna = gkSel.value;
+  if(!selectedWarna) {
+    notif.innerHTML = '';
+    notif.className = 'jersey-notif';
+  } else {
+    const stok = JERSEY_STOK[selectedWarna];
+    const total = stok ? Object.values(stok).reduce((a,b)=>a+b,0) : 0;
+    if(total > 0) {
+      notif.innerHTML = '<i class="ti ti-check" style="font-size:9px"></i> OK';
+      notif.className = 'jersey-notif jok';
+    } else {
+      notif.innerHTML = '<i class="ti ti-alert-triangle" style="font-size:9px"></i> Habis!';
+      notif.className = 'jersey-notif jwarn';
+    }
+  }
+}
+
+// ── FORMASI: tampil/sembunyikan kolom formasi berdasarkan Jenis Game ──
+// Di mockup ini kita track dengan variable global
+let isFootball = false;
+
+function setGameMode(mode) {
+  isFootball = (mode === 'football');
+  const th = document.getElementById('th-formasi');
+  const tds = document.querySelectorAll('.td-formasi');
+  if(th) th.style.display = isFootball ? '' : 'none';
+  tds.forEach(td => td.style.display = isFootball ? '' : 'none');
+}
+
+// ── LINE UP VIEW ──
+function renderLineupView() {
+  const body = document.getElementById('lineup-view-body');
+  if(!body) return;
+
+  // Kumpulkan data dari tabel slot
+  const rows = document.querySelectorAll('#trx-slot .stbl tbody tr');
+  const byWarna = {};
+
+  rows.forEach(row => {
+    const noCell = row.cells[0];
+    const namaCell = row.cells[1];
+    const jerseyCell = row.querySelector('.jersey-sel');
+    const posisiCell = row.cells[6];
+    const ukuranCell = row.cells[8];
+    const formasiCell = row.querySelector('.formasi-sel');
+
+    if(!jerseyCell || !jerseyCell.value) return;
+
+    const warna = jerseyCell.value;
+    const namaText = namaCell ? namaCell.textContent.replace(/Next|SHTM Next ✓|SHTM/g,'').trim() : '?';
+    const posisi = posisiCell ? posisiCell.textContent.trim() : '';
+    const ukuran = ukuranCell ? ukuranCell.textContent.trim() : '';
+    const formasi = formasiCell ? formasiCell.value : '';
+    const isGk = posisi === 'GK';
+
+    if(!byWarna[warna]) byWarna[warna] = { gk:[], field:[] };
+    if(isGk) byWarna[warna].gk.push({nama:namaText, uk:ukuran, formasi});
+    else byWarna[warna].field.push({nama:namaText, uk:ukuran, formasi});
+  });
+
+  const WARNA_CONFIG = {
+    'Merah':  { emoji:'❤️', dot:'#EF4444' },
+    'Kuning': { emoji:'💛', dot:'#EAB308' },
+    'Biru':   { emoji:'💙', dot:'#3B82F6' },
+    'Hijau':  { emoji:'💚', dot:'#16A34A' },
+  };
+
+  if(Object.keys(byWarna).length === 0) {
+    body.innerHTML = '<div style="color:var(--mu);font-size:13px;padding:10px 0">Belum ada player dengan jersey terpilih.</div>';
+    return;
+  }
+
+  let out = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">';
+  const urutan = ['Merah','Kuning','Biru','Hijau'];
+  urutan.forEach(warna => {
+    if(!byWarna[warna]) return;
+    const cfg = WARNA_CONFIG[warna] || { emoji:'⚪', dot:'#888' };
+    const tim = byWarna[warna];
+    out += `<div style="border:1px solid var(--bd);border-radius:10px;overflow:hidden">
+      <div style="padding:9px 13px;font-size:13px;font-weight:600;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:7px;background:var(--su2)">
+        <span style="width:10px;height:10px;border-radius:50%;background:${cfg.dot};display:inline-block;flex-shrink:0"></span>
+        ${cfg.emoji} ${warna} SMS
+        <span style="font-size:11px;font-weight:400;color:var(--mu);margin-left:auto">${tim.gk.length} GK · ${tim.field.length} Field</span>
+      </div>
+      <div style="padding:8px 13px">`;
+
+    tim.gk.forEach(p => {
+      out += `<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:12px;border-bottom:1px dashed var(--bd)">
+        <span><span style="color:var(--mu);margin-right:4px">(GK)</span> <strong>${p.nama}</strong></span>
+        <span style="color:var(--mu)">${p.uk}${isFootball && p.formasi ? ' · '+p.formasi : ''}</span>
+      </div>`;
+    });
+    tim.field.forEach((p,i) => {
+      out += `<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:12px">
+        <span><span style="color:var(--hi);margin-right:4px">${i+1}</span> ${p.nama}</span>
+        <span style="color:var(--mu)">${p.uk}${isFootball && p.formasi ? ' · '+p.formasi : ''}</span>
+      </div>`;
+    });
+
+    out += `</div></div>`;
+  });
+  out += '</div>';
+  body.innerHTML = out;
+}
+
+// Intercept openModal untuk lineup view
+const _origOpenModal = openModal;
+openModal = function(id) {
+  _origOpenModal(id);
+  if(id === 'm-broadcast') setTimeout(genBroadcast, 80);
+  if(id === 'm-lineup-view') setTimeout(renderLineupView, 60);
+};
+
+// Init GK dropdowns saat halaman load
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.jersey-sel[data-posisi="gk"]').forEach(gkSel => {
+    updateGkOptions(gkSel);
+  });
+});
+
+</script>
+</body>
+</html>
