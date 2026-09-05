@@ -224,95 +224,53 @@ body{font-family:var(--fn);background:var(--bg);color:var(--tx);font-size:13px;l
 </style>
 
 <script>
-// ═══════════════════════════════════════════════════
-// api.js — Sobat Minisoccer Portal
-// Ganti GAS_URL dengan URL deployment Google Apps Script
-// ═══════════════════════════════════════════════════
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwyhpWM7QmS3cz6MgY1MhwOMswMtgO4ZWMYYX_QzWt8B8Yvy8aW0L8qAgS7-7a75j6-Ag/exec'; // Apps Script endpoint
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwyhpWM7QmS3cz6MgY1MhwOMswMtgO4ZWMYYX_QzWt8B8Yvy8aW0L8qAgS7-7a75j6-Ag/exec';
 
-// ── Core fetch ──────────────────────────────────────
 async function gasGet(action, params={}) {
   const url = new URL(GAS_URL);
   url.searchParams.set('action', action);
   Object.entries(params).forEach(([k,v]) => url.searchParams.set(k, v));
-  try {
-    const res  = await fetch(url.toString());
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-    return data;
-  } catch(e) {
-    console.error('gasGet error:', action, e);
-    throw e;
-  }
+  const res  = await fetch(url.toString());
+  const data = await res.json();
+  if (data.error) throw new Error(data.error);
+  return data;
 }
 
 async function gasPost(action, payload={}) {
-  try {
-    const res  = await fetch(GAS_URL, {
-      method : 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body   : JSON.stringify({ action, ...payload })
-    });
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-    return data;
-  } catch(e) {
-    console.error('gasPost error:', action, e);
-    throw e;
-  }
+  const res  = await fetch(GAS_URL, {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({action, ...payload})
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error);
+  return data;
 }
 
-// ── API methods ─────────────────────────────────────
 const API = {
-  // GET
-  getDashboard    : ()  => gasGet('getDashboard'),
-  getPlayers      : ()  => gasGet('getPlayers'),
-  getMatches      : ()  => gasGet('getMatches'),
-  getMatch        : (id)=> gasGet('getMatch', {id}),
-  getStokJersey   : ()  => gasGet('getStokJersey'),
-  getShtm         : ()  => gasGet('getShtm'),
-  getDeposit      : ()  => gasGet('getDeposit'),
-  getConfig       : ()  => gasGet('getConfig'),
-
-  // POST — Match
-  createMatch     : (p) => gasPost('createMatch', p),
-  closeMatch      : (p) => gasPost('closeMatch', p),
-
-  // POST — Player dalam match
-  addPlayer       : (p) => gasPost('addPlayer', p),
-  updatePlayer    : (p) => gasPost('updatePlayer', p),
-  deletePlayer    : (p) => gasPost('deletePlayer', p),
-
-  // POST — Biaya
-  addBiaya        : (p) => gasPost('addBiaya', p),
-  updateBiaya     : (p) => gasPost('updateBiaya', p),
-  deleteBiaya     : (p) => gasPost('deleteBiaya', p),
-
-  // POST — Gol
-  addGol          : (p) => gasPost('addGol', p),
-  deleteGol       : (p) => gasPost('deleteGol', p),
-
-  // POST — SHTM
-  flagShtm        : (p) => gasPost('flagShtm', p),
-  useShtm         : (p) => gasPost('useShtm', p),
-
-  // POST — Deposit
-  addDeposit      : (p) => gasPost('addDeposit', p),
-  useDeposit      : (p) => gasPost('useDeposit', p),
-
-  // POST — Stok Jersey
+  getDashboard:     ()  => gasGet('getDashboard'),
+  getPlayers:       ()  => gasGet('getPlayers'),
+  getMatches:       ()  => gasGet('getMatches'),
+  getStokJersey:    ()  => gasGet('getStokJersey'),
+  getShtm:          ()  => gasGet('getShtm'),
+  getDeposit:       ()  => gasGet('getDeposit'),
+  getConfig:        ()  => gasGet('getConfig'),
+  createMatch:      (p) => gasPost('createMatch', p),
+  closeMatch:       (p) => gasPost('closeMatch', p),
+  addPlayer:        (p) => gasPost('addPlayer', p),
+  updatePlayer:     (p) => gasPost('updatePlayer', p),
+  deletePlayer:     (p) => gasPost('deletePlayer', p),
+  addBiaya:         (p) => gasPost('addBiaya', p),
+  addGol:           (p) => gasPost('addGol', p),
+  flagShtm:         (p) => gasPost('flagShtm', p),
+  useShtm:          (p) => gasPost('useShtm', p),
+  addDeposit:       (p) => gasPost('addDeposit', p),
   updateStokJersey: (p) => gasPost('updateStokJersey', p),
-
-  // POST — DB Player
-  addNewPlayer    : (p) => gasPost('addNewPlayer', p),
-
-  // POST — Config
-  updateConfig    : (p) => gasPost('updateConfig', p),
+  addNewPlayer:     (p) => gasPost('addNewPlayer', p),
+  updateConfig:     (p) => gasPost('updateConfig', p),
 };
 
-// ── Auth sederhana (localStorage) ───────────────────
 const AUTH = {
-  PASSWORD: 'sms2024', // ← ganti password di sini
+  PASSWORD: 'sms2024',
   login(pw) {
     if (pw === this.PASSWORD) {
       localStorage.setItem('sms_auth', btoa(pw + Date.now()));
@@ -336,12 +294,12 @@ const AUTH = {
   <div class="nav-tabs">
     <div class="nav-tab active" id="ntab-dashboard" onclick="goPage('dashboard')"><i class="ti ti-layout-dashboard" style="font-size:14px"></i> Dashboard</div>
     <div class="nav-tab" id="ntab-reporting" onclick="goPage('reporting')"><i class="ti ti-chart-bar" style="font-size:14px"></i> Reporting</div>
-    <div class="nav-tab" id="ntab-transaksi" onclick="goPage('transaksi')"><i class="ti ti-clipboard-list" style="font-size:14px"></i> Transaksi <span class="lock-tag"><i class="ti ti-lock" style="font-size:9px"></i> Login</span></div>
-    <div class="nav-tab" id="ntab-admin" onclick="goPage('admin')"><i class="ti ti-settings" style="font-size:14px"></i> Admin <span class="lock-tag"><i class="ti ti-lock" style="font-size:9px"></i> Login</span></div>
+    <div class="nav-tab admin-only" id="ntab-transaksi" onclick="goPage('transaksi')" style="display:none"><i class="ti ti-clipboard-list" style="font-size:14px"></i> Transaksi</div>
+    <div class="nav-tab admin-only" id="ntab-admin" onclick="goPage('admin')" style="display:none"><i class="ti ti-settings" style="font-size:14px"></i> Admin</div>
   </div>
   <div class="nav-right" style="display:flex;gap:8px">
     <button id="btn-logout" class="btn-nav" onclick="doLogout()" style="display:none;color:#DC2626"><i class="ti ti-logout" style="font-size:13px"></i> Logout</button>
-    <button class="btn-nav" onclick="goPage('login')"><i class="ti ti-login" style="font-size:13px"></i> Login admin</button>
+    <button id="btn-login" class="btn-nav" onclick="goPage('login')"><i class="ti ti-login" style="font-size:13px"></i> Login admin</button>
   </div>
 </nav>
 
@@ -363,7 +321,7 @@ const AUTH = {
     <div class="met"><div class="met-lbl"><i class="ti ti-trophy" style="font-size:12px"></i>Match terbaik</div><div class="met-val" style="color:var(--gn)">+489rb</div><div class="met-sub">26 Juli BIG — Internal BIG</div></div>
   </div>
 
-  <!-- ROW 1: Margin + Shared profit (1 card, digabung) -->
+  <!-- ROW 1: Margin per match + Profit Minisoccer vs Football -->
   <div class="g2" style="margin-bottom:14px">
     <div class="card">
       <div class="card-hd">
@@ -383,8 +341,28 @@ const AUTH = {
         </div>
       </div>
     </div>
+    <div class="card">
+      <div class="card-hd">
+        <span class="card-title">Profit per match — Minisoccer vs Football</span>
+      </div>
+      <div style="padding:8px 14px;border-bottom:1px solid var(--bd);display:flex;gap:6px;flex-wrap:wrap" id="profit-filter-chips">
+        <span class="chip active" onclick="filterTipe('semua',this)">Semua</span>
+        <span class="chip" onclick="filterTipe('internal',this)">Internal</span>
+        <span class="chip" onclick="filterTipe('join',this)">Join Game</span>
+        <span class="chip" onclick="filterTipe('sparing',this)">Sparing Eksternal</span>
+      </div>
+      <div class="card-body" style="padding:12px 16px">
+        <div class="ch ch-160"><canvas id="chartLapangan"></canvas></div>
+        <div style="display:flex;gap:14px;font-size:11px;color:var(--mu);margin-top:8px">
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;background:var(--nv);border-radius:2px;display:inline-block"></span>Minisoccer</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;background:var(--gn);border-radius:2px;display:inline-block"></span>Football</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <!-- Shared profit — SATU card, bukan dobel -->
+  <!-- ROW 2: Shared profit + Top scorer -->
+  <div class="g2" style="margin-bottom:14px">
     <div class="card">
       <div class="card-hd"><span class="card-title">Shared profit kumulatif — Malik & Filan</span></div>
       <div class="card-body" style="display:flex;flex-direction:column;gap:14px">
@@ -406,56 +384,12 @@ const AUTH = {
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- ROW 2: Histogram profit per tipe + lapangan -->
-  <div class="g2" style="margin-bottom:14px">
-    <!-- Histogram utama: kecil vs besar, filter tipe event -->
     <div class="card">
       <div class="card-hd">
-        <span class="card-title">Profit per match — Minisoccer vs Football</span>
+        <span class="card-title"><i class="ti ti-trophy" style="color:#B8860B;font-size:14px"></i> Top skor — total gol</span>
+        <div class="chips"><span class="chip active">All time</span><span class="chip">2026</span></div>
       </div>
-      <!-- Filter tipe event sama dengan pilihan di buat match baru -->
-      <div style="padding:8px 14px;border-bottom:1px solid var(--bd);display:flex;gap:6px;flex-wrap:wrap">
-        <span class="chip active" onclick="filterTipe('semua',this)">Semua</span>
-        <span class="chip" onclick="filterTipe('internal',this)">Internal</span>
-        <span class="chip" onclick="filterTipe('join',this)">Join Game</span>
-        <span class="chip" onclick="filterTipe('sparing',this)">Sparing Eksternal</span>
-      </div>
-      <div class="card-body" style="padding:12px 16px">
-        <div class="ch ch-160"><canvas id="chartLapangan"></canvas></div>
-        <div style="display:flex;gap:14px;font-size:11px;color:var(--mu);margin-top:8px">
-          <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;background:var(--nv);border-radius:2px;display:inline-block"></span>Minisoccer</span>
-          <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;background:var(--gn);border-radius:2px;display:inline-block"></span>Football</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Frequent + top skor -->
-    <div style="display:flex;flex-direction:column;gap:12px">
-      <div class="card" style="margin-bottom:0">
-        <div class="card-hd"><span class="card-title">Frequent players — top 9</span></div>
-        <div class="card-body" style="padding:10px">
-          <div class="pgrid">
-            <div class="pcard"><span class="prk gd">1</span><div class="pav" style="background:#EFF6FF;color:#1D4ED8">MA</div><div class="pinf"><div class="pnm">Malik</div><div class="pmt">SMS · GK</div></div><div class="pcnt">40×</div></div>
-            <div class="pcard"><span class="prk sv">2</span><div class="pav" style="background:#F0FDF4;color:#15803D">FI</div><div class="pinf"><div class="pnm">Filan</div><div class="pmt">SMS · GK</div></div><div class="pcnt">37×</div></div>
-            <div class="pcard"><span class="prk bz">3</span><div class="pav" style="background:#FEF3C7;color:#92400E">JY</div><div class="pinf"><div class="pnm">Jayadi</div><div class="pmt">Umum</div></div><div class="pcnt">35×</div></div>
-            <div class="pcard"><span class="prk nm">4</span><div class="pav" style="background:#F3E8FF;color:#6D28D9">AN</div><div class="pinf"><div class="pnm">Annas</div><div class="pmt">BMR</div></div><div class="pcnt">33×</div></div>
-            <div class="pcard"><span class="prk nm">5</span><div class="pav" style="background:#EFF6FF;color:#1D4ED8">HS</div><div class="pinf"><div class="pnm">Hisyam</div><div class="pmt">SMS</div></div><div class="pcnt">30×</div></div>
-            <div class="pcard"><span class="prk nm">6</span><div class="pav" style="background:#F0FDF4;color:#15803D">TV</div><div class="pinf"><div class="pnm">Tavano</div><div class="pmt">Umum</div></div><div class="pcnt">28×</div></div>
-            <div class="pcard"><span class="prk nm">7</span><div class="pav" style="background:#FEF3C7;color:#92400E">BS</div><div class="pinf"><div class="pnm">Bagus Suryo</div><div class="pmt">Umum</div></div><div class="pcnt">27×</div></div>
-            <div class="pcard"><span class="prk nm">8</span><div class="pav" style="background:#F3E8FF;color:#6D28D9">BM</div><div class="pinf"><div class="pnm">Bambang</div><div class="pmt">Umum</div></div><div class="pcnt">26×</div></div>
-            <div class="pcard"><span class="prk nm">9</span><div class="pav" style="background:#EFF6FF;color:#1D4ED8">ND</div><div class="pinf"><div class="pnm">Nandha</div><div class="pmt">SMS · GK</div></div><div class="pcnt">25×</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="card" style="margin-bottom:0">
-        <div class="card-hd">
-          <span class="card-title"><i class="ti ti-trophy" style="color:#B8860B;font-size:14px"></i> Top skor — total gol</span>
-          <div class="chips"><span class="chip active">All time</span><span class="chip">2026</span></div>
-        </div>
-        <div class="card-body" style="padding:8px 0" id="d-scorer"></div>
-      </div>
+      <div class="card-body" style="padding:8px 0" id="d-scorer"></div>
     </div>
   </div>
 </div>
@@ -1010,8 +944,8 @@ const AUTH = {
       </div>
       <div style="font-size:16px;font-weight:600;text-align:center;margin-bottom:4px">Login admin</div>
       <div style="font-size:12px;color:var(--mu);text-align:center;margin-bottom:20px">Akses Transaksi dan menu Admin</div>
-      <!-- Email tidak diperlukan untuk login -->
-      <div class="fg" style="margin-bottom:18px"><div class="fl">Password</div><input type="password" placeholder="Masukkan password admin" id="login-password"></div>
+      <div class="fg"><div class="fl">Email</div><input type="email" placeholder="sobat.minisoccer@gmail.com"></div>
+      <div class="fg" style="margin-bottom:18px"><div class="fl">Password</div><input type="password" placeholder="Password admin" id="login-password"></div>
       <button class="btn btn-prim" style="width:100%;justify-content:center;padding:9px" onclick="doLogin()"><i class="ti ti-login"></i> Masuk sebagai admin</button>
       <div style="text-align:center;margin-top:12px"><a href="#" onclick="goPage('dashboard')" style="font-size:12px;color:var(--mu);text-decoration:none">← Kembali ke dashboard</a></div>
     </div>
@@ -1344,10 +1278,8 @@ function mkLapChart(kecil,besar){ // kecil=Minisoccer, besar=Football
 }
 
 function filterTipe(tipe,btn){
-  document.querySelectorAll('#page-dashboard .chips .chip').forEach(c=>{
-    // Hanya chip di card lapangan
-    if(c.closest('.card')===btn.closest('.card'))c.classList.remove('active');
-  });
+  // Hanya reset chip di dalam container profit filter
+  document.querySelectorAll('#profit-filter-chips .chip').forEach(c=>c.classList.remove('active'));
   btn.classList.add('active');
   const d=LAP_DATA[tipe]||LAP_DATA.semua;
   mkLapChart(d.mini,d.foot);
@@ -1360,10 +1292,8 @@ function initCharts(){
 }
 
 function switchChart(n,btn){
-  document.querySelectorAll('#page-dashboard .chips .chip').forEach(c=>{
-    // Hanya chip di card margin
-    if(c.closest('.card')===btn.closest('.card'))c.classList.remove('active');
-  });
+  // Reset hanya chip di dalam card yang sama
+  btn.closest('.chips').querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
   btn.classList.add('active');
   const k=n<=12?'12':n<=24?'24':'44';
   if(ci)ci.destroy();
@@ -1741,38 +1671,39 @@ function doLogin() {
   const pw = pwEl.value.trim();
   if (!pw) { alert('Masukkan password.'); return; }
   if (AUTH.login(pw)) {
+    showAdminUI();
     goPage('transaksi');
-    document.querySelectorAll('.lock-tag').forEach(el => el.style.display='none');
-    const btnLogout = document.getElementById('btn-logout');
-    if (btnLogout) btnLogout.style.display = 'flex';
-    const btnLogin  = document.querySelector('.btn-nav');
-    if (btnLogin)  btnLogin.style.display  = 'none';
   } else {
     alert('Password salah.');
-    pwEl.value = '';
-    pwEl.focus();
+    pwEl.value = ''; pwEl.focus();
   }
 }
 
 function doLogout() {
   AUTH.logout();
+  hideAdminUI();
   goPage('dashboard');
-  document.querySelectorAll('.lock-tag').forEach(el => el.style.display='');
+}
+
+function showAdminUI() {
+  document.querySelectorAll('.admin-only').forEach(el => el.style.display='');
   const btnLogout = document.getElementById('btn-logout');
+  const btnLogin  = document.getElementById('btn-login');
+  if (btnLogout) btnLogout.style.display = 'flex';
+  if (btnLogin)  btnLogin.style.display  = 'none';
+}
+
+function hideAdminUI() {
+  document.querySelectorAll('.admin-only').forEach(el => el.style.display='none');
+  const btnLogout = document.getElementById('btn-logout');
+  const btnLogin  = document.getElementById('btn-login');
   if (btnLogout) btnLogout.style.display = 'none';
-  const btnLogin  = document.querySelector('.btn-nav');
   if (btnLogin)  btnLogin.style.display  = 'flex';
 }
 
-// Cek sesi saat load
 window.addEventListener('DOMContentLoaded', () => {
-  if (AUTH.isLoggedIn()) {
-    document.querySelectorAll('.lock-tag').forEach(el => el.style.display='none');
-    const btnLogout = document.getElementById('btn-logout');
-    if (btnLogout) btnLogout.style.display = 'flex';
-    const btnLogin  = document.querySelector('.btn-nav');
-    if (btnLogin)  btnLogin.style.display  = 'none';
-  }
+  if (AUTH.isLoggedIn()) showAdminUI();
+  else hideAdminUI();
 });
 
 </script>
