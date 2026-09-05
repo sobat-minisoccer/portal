@@ -3,7 +3,7 @@
 // Deploy sebagai: Web App | Execute as: Me | Access: Anyone
 // ============================================================
 
-const SS_ID   = ''; // ← ISI dengan Spreadsheet ID dari Google Sheets
+const SS_ID   = '1z6nbrxSHzDnW3WNVBWX4mP_f5rqJSh3Z27GJWftuq84'; // ← ISI dengan Spreadsheet ID dari Google Sheets
 const SS      = () => SpreadsheetApp.openById(SS_ID);
 
 const SHEET = {
