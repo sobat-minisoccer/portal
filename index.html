@@ -387,7 +387,7 @@ const AUTH = {
     <div class="card">
       <div class="card-hd">
         <span class="card-title"><i class="ti ti-trophy" style="color:#B8860B;font-size:14px"></i> Top skor — total gol</span>
-        <div class="chips"><span class="chip active">All time</span><span class="chip">2026</span></div>
+        <div class="chips"><span class="chip active" onclick="switchScorer('alltime',this)">All time</span><span class="chip" onclick="switchScorer('2026',this)">2026</span></div>
       </div>
       <div class="card-body" style="padding:8px 0" id="d-scorer"></div>
     </div>
@@ -422,15 +422,15 @@ const AUTH = {
   <div id="rpt-pembayaran" class="tab-p active">
     <div class="fbar"><span class="flbl">Status</span><select><option>Semua</option><option>Lunas</option><option>Sementara</option><option>Walk-in</option><option>Cancel</option></select></div>
     <table class="tbl">
-      <thead><tr><th>Player</th><th>HTM</th><th>Label</th><th>Deposit dipakai</th><th>BCA</th><th>BSI</th><th>Cash</th><th>Tgl bayar</th><th>Status</th></tr></thead>
+      <thead><tr><th>Player</th><th>HTM (Rp)</th><th>Label</th><th>Deposit Dipakai</th><th>Metode Bayar</th><th>Jumlah Bayar (Rp)</th><th>Tgl Bayar</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td class="pri">Malik</td><td>95.000</td><td><span class="b b-gy">Normal</span></td><td>—</td><td>95.000</td><td>—</td><td>—</td><td>02/09</td><td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td></tr>
-        <tr><td class="pri">Ricky <span class="b b-sh" style="font-size:9px">SHTM</span></td><td>50.000</td><td><span class="b b-sh">SHTM</span></td><td>—</td><td>—</td><td>50.000</td><td>—</td><td>04/09</td><td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td></tr>
-        <tr><td class="pri">Wayan <span class="b b-dp" style="font-size:9px">Dep 70rb</span></td><td>95.000</td><td><span class="b b-gy">Normal</span></td><td style="color:var(--am);font-weight:500">70.000</td><td>—</td><td>—</td><td>25.000</td><td>05/09</td><td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td></tr>
-        <tr><td class="pri">Jayadi</td><td>95.000</td><td><span class="b b-gy">Normal</span></td><td>—</td><td>—</td><td>95.000</td><td>—</td><td>03/09</td><td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td></tr>
-        <tr><td class="pri">Heru</td><td>95.000</td><td><span class="b b-gy">Normal</span></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="b b-am"><span class="sd sda"></span>Sementara</span></td></tr>
+        <tr><td class="pri">Malik</td><td>95.000</td><td><span class="b b-gy">Normal</span></td><td>—</td><td><span class="b b-ac">BCA</span></td><td>95.000</td><td>02/09</td><td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td></tr>
+        <tr><td class="pri">Ricky <span class="b b-sh" style="font-size:9px">SHTM</span></td><td>50.000</td><td><span class="b b-sh">SHTM</span></td><td>—</td><td><span class="b b-ac">BSI</span></td><td>50.000</td><td>04/09</td><td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td></tr>
+        <tr><td class="pri">Wayan <span class="b b-dp" style="font-size:9px">Dep 70rb</span></td><td>95.000</td><td><span class="b b-gy">Normal</span></td><td style="color:var(--am);font-weight:500">Rp 70.000</td><td><span class="b b-gy">Cash</span></td><td>25.000</td><td>05/09</td><td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td></tr>
+        <tr><td class="pri">Jayadi</td><td>95.000</td><td><span class="b b-gy">Normal</span></td><td>—</td><td><span class="b b-ac">BSI</span></td><td>95.000</td><td>03/09</td><td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td></tr>
+        <tr><td class="pri">Heru</td><td>95.000</td><td><span class="b b-gy">Normal</span></td><td>—</td><td><span class="b b-gy">— (belum)</span></td><td>—</td><td>—</td><td><span class="b b-am"><span class="sd sda"></span>Sementara</span></td></tr>
       </tbody>
-      <tfoot><tr><td colspan="3">Total terkumpul</td><td style="color:var(--am)">Rp 70.000</td><td>Rp 95.000</td><td>Rp 180.000</td><td>Rp 25.000</td><td colspan="2" style="color:var(--gn)">= Rp 1.530.000</td></tr></tfoot>
+      <tfoot><tr><td colspan="3">Total terkumpul</td><td style="color:var(--am)">Rp 70.000</td><td colspan="2" style="color:var(--gn);font-weight:600">= Rp 1.530.000</td><td colspan="2"></td></tr></tfoot>
     </table>
   </div>
   <div id="rpt-operasional" class="tab-p">
@@ -454,7 +454,7 @@ const AUTH = {
     <table class="tbl">
       <thead><tr><th>Match</th><th>Tipe</th><th>Sales (Rp)</th><th>Cost (Rp)</th><th>Margin (Rp)</th><th>Malik 60%</th><th>Filan 40%</th></tr></thead>
       <tbody>
-        <tr><td class="pri">6 Sept 2026</td><td><span class="b b-gy">Internal</span></td><td>1.863.500</td><td>1.614.000</td><td style="color:var(--gn);font-weight:600">+249.500</td><td style="color:var(--nv)">149.700</td><td style="color:var(--gn)">99.800</td></tr>
+        
         <tr><td class="pri">15 Agust BOSS</td><td><span class="b b-gy">Internal</span></td><td>1.822.500</td><td>1.621.000</td><td style="color:var(--gn);font-weight:600">+201.500</td><td style="color:var(--nv)">120.900</td><td style="color:var(--gn)">80.600</td></tr>
         <tr><td class="pri">26 Juli BIG</td><td><span class="b b-ac">Internal BIG</span></td><td>2.160.000</td><td>1.671.000</td><td style="color:var(--gn);font-weight:600">+489.000</td><td style="color:var(--nv)">293.400</td><td style="color:var(--gn)">195.600</td></tr>
         <tr><td class="pri">12 Juli BOSS</td><td><span class="b b-gy">Internal</span></td><td>1.850.000</td><td>1.607.000</td><td style="color:var(--gn);font-weight:600">+243.000</td><td style="color:var(--nv)">145.800</td><td style="color:var(--gn)">97.200</td></tr>
@@ -471,7 +471,6 @@ const AUTH = {
     <table class="tbl">
       <thead><tr><th>Match</th><th>Margin</th><th>Net Malik (60%)</th><th>Net Filan (40%)</th><th>Kumulatif Malik</th><th>Kumulatif Filan</th></tr></thead>
       <tbody>
-        <tr><td class="pri">6 Sept 2026</td><td style="color:var(--gn)">+249.500</td><td style="color:var(--nv);font-weight:500">+149.700</td><td style="color:var(--gn);font-weight:500">+99.800</td><td>8.297.430</td><td>5.472.562</td></tr>
         <tr><td class="pri">15 Agust</td><td style="color:var(--gn)">+201.500</td><td style="color:var(--nv);font-weight:500">+120.900</td><td style="color:var(--gn);font-weight:500">+80.600</td><td>8.147.730</td><td>5.372.762</td></tr>
         <tr><td class="pri">26 Juli BIG</td><td style="color:var(--gn)">+489.000</td><td style="color:var(--nv);font-weight:500">+293.400</td><td style="color:var(--gn);font-weight:500">+195.600</td><td>8.026.830</td><td>5.292.162</td></tr>
       </tbody>
@@ -565,14 +564,15 @@ const AUTH = {
                 </td>
                 <td><span class="b b-gy">M</span></td>
                 <td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td>
-                <td class="td-formasi" style="display:none">
-                  <select class="formasi-sel" style="font-size:11px;padding:3px 5px;border-radius:5px;border:1px solid var(--bd);background:var(--su);font-family:var(--fn);max-width:68px">
+                <td class="td-formasi">
+                  <span class="formasi-dash" style="color:var(--mu);font-size:12px">—</span>
+                  <select class="formasi-sel" style="display:none;font-size:11px;padding:3px 5px;border-radius:5px;border:1px solid var(--bd);background:var(--su);font-family:var(--fn);max-width:68px">
                     <option>GK</option><option>CB</option><option>RB</option><option>LB</option>
                     <option>DMF</option><option>AMF</option><option>LMF</option><option>RMF</option>
                     <option>CMF</option><option>CF</option><option>SS</option>
                   </select>
                 </td>
-                <td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td>
+                <td><div class="acts"><button class="ib" onclick="editSlotPlayer(this)" title="Edit"><i class="ti ti-edit"></i></button><button class="ib del" onclick="hapusSlotPlayer(this)" title="Hapus"><i class="ti ti-trash"></i></button></div></td>
               </tr>
               <tr style="background:#FFF5F5">
                 <td style="color:var(--hi)">1</td>
@@ -592,14 +592,15 @@ const AUTH = {
                 </td>
                 <td><span class="b b-gy">M</span></td>
                 <td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td>
-                <td class="td-formasi" style="display:none">
-                  <select class="formasi-sel" style="font-size:11px;padding:3px 5px;border-radius:5px;border:1px solid var(--bd);background:var(--su);font-family:var(--fn);max-width:68px">
+                <td class="td-formasi">
+                  <span class="formasi-dash" style="color:var(--mu);font-size:12px">—</span>
+                  <select class="formasi-sel" style="display:none;font-size:11px;padding:3px 5px;border-radius:5px;border:1px solid var(--bd);background:var(--su);font-family:var(--fn);max-width:68px">
                     <option>GK</option><option>CB</option><option>RB</option><option>LB</option>
                     <option>DMF</option><option>AMF</option><option>LMF</option><option>RMF</option>
                     <option>CMF</option><option>CF</option><option>SS</option>
                   </select>
                 </td>
-                <td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td>
+                <td><div class="acts"><button class="ib" onclick="editSlotPlayer(this)" title="Edit"><i class="ti ti-edit"></i></button><button class="ib del" onclick="hapusSlotPlayer(this)" title="Hapus"><i class="ti ti-trash"></i></button></div></td>
               </tr>
               <tr>
                 <td style="color:var(--hi)">2</td>
@@ -619,14 +620,15 @@ const AUTH = {
                 </td>
                 <td><span class="b b-gy">L</span></td>
                 <td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td>
-                <td class="td-formasi" style="display:none">
-                  <select class="formasi-sel" style="font-size:11px;padding:3px 5px;border-radius:5px;border:1px solid var(--bd);background:var(--su);font-family:var(--fn);max-width:68px">
+                <td class="td-formasi">
+                  <span class="formasi-dash" style="color:var(--mu);font-size:12px">—</span>
+                  <select class="formasi-sel" style="display:none;font-size:11px;padding:3px 5px;border-radius:5px;border:1px solid var(--bd);background:var(--su);font-family:var(--fn);max-width:68px">
                     <option>GK</option><option>CB</option><option>RB</option><option>LB</option>
                     <option>DMF</option><option>AMF</option><option>LMF</option><option>RMF</option>
                     <option>CMF</option><option>CF</option><option>SS</option>
                   </select>
                 </td>
-                <td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td>
+                <td><div class="acts"><button class="ib" onclick="editSlotPlayer(this)" title="Edit"><i class="ti ti-edit"></i></button><button class="ib del" onclick="hapusSlotPlayer(this)" title="Hapus"><i class="ti ti-trash"></i></button></div></td>
               </tr>
               <tr>
                 <td style="color:var(--hi)">3</td>
@@ -646,14 +648,15 @@ const AUTH = {
                 </td>
                 <td><span class="b b-gy">XL</span></td>
                 <td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td>
-                <td class="td-formasi" style="display:none">
-                  <select class="formasi-sel" style="font-size:11px;padding:3px 5px;border-radius:5px;border:1px solid var(--bd);background:var(--su);font-family:var(--fn);max-width:68px">
+                <td class="td-formasi">
+                  <span class="formasi-dash" style="color:var(--mu);font-size:12px">—</span>
+                  <select class="formasi-sel" style="display:none;font-size:11px;padding:3px 5px;border-radius:5px;border:1px solid var(--bd);background:var(--su);font-family:var(--fn);max-width:68px">
                     <option>GK</option><option>CB</option><option>RB</option><option>LB</option>
                     <option>DMF</option><option>AMF</option><option>LMF</option><option>RMF</option>
                     <option>CMF</option><option>CF</option><option>SS</option>
                   </select>
                 </td>
-                <td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td>
+                <td><div class="acts"><button class="ib" onclick="editSlotPlayer(this)" title="Edit"><i class="ti ti-edit"></i></button><button class="ib del" onclick="hapusSlotPlayer(this)" title="Hapus"><i class="ti ti-trash"></i></button></div></td>
               </tr>
               <tr class="sem">
                 <td style="color:var(--hi)">4</td>
@@ -673,14 +676,15 @@ const AUTH = {
                 </td>
                 <td><span class="b b-gy">L</span></td>
                 <td><span class="b b-am"><span class="sd sda"></span>Sementara</span></td>
-                <td class="td-formasi" style="display:none">
-                  <select class="formasi-sel" style="font-size:11px;padding:3px 5px;border-radius:5px;border:1px solid var(--bd);background:var(--su);font-family:var(--fn);max-width:68px">
+                <td class="td-formasi">
+                  <span class="formasi-dash" style="color:var(--mu);font-size:12px">—</span>
+                  <select class="formasi-sel" style="display:none;font-size:11px;padding:3px 5px;border-radius:5px;border:1px solid var(--bd);background:var(--su);font-family:var(--fn);max-width:68px">
                     <option>GK</option><option>CB</option><option>RB</option><option>LB</option>
                     <option>DMF</option><option>AMF</option><option>LMF</option><option>RMF</option>
                     <option>CMF</option><option>CF</option><option>SS</option>
                   </select>
                 </td>
-                <td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td>
+                <td><div class="acts"><button class="ib" onclick="editSlotPlayer(this)" title="Edit"><i class="ti ti-edit"></i></button><button class="ib del" onclick="hapusSlotPlayer(this)" title="Hapus"><i class="ti ti-trash"></i></button></div></td>
               </tr>
             </tbody>
           </table>
@@ -692,10 +696,10 @@ const AUTH = {
           <table class="stbl">
             <thead><tr><th>Item</th><th>Tipe</th><th>Rencana (Rp)</th><th>Realisasi (Rp)</th><th>Malik 60%</th><th>Filan 40%</th><th>Aksi</th></tr></thead>
             <tbody>
-              <tr><td style="font-weight:500">Sewa lapangan</td><td><span class="b b-gy">Ops</span></td><td>1.300.000</td><td>1.300.000</td><td>—</td><td>—</td><td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td></tr>
-              <tr><td style="font-weight:500">Wasit</td><td><span class="b b-gy">Ops</span></td><td>200.000</td><td>200.000</td><td>—</td><td>—</td><td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td></tr>
-              <tr><td style="font-weight:500">Air + laundry</td><td><span class="b b-gy">Ops</span></td><td>85.000</td><td>85.000</td><td>—</td><td>—</td><td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td></tr>
-              <tr><td style="font-weight:500">Gimmick voucher</td><td><span class="b b-gy">Ops</span></td><td>29.000</td><td>29.000</td><td>—</td><td>—</td><td><div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div></td></tr>
+              <tr><td style="font-weight:500">Sewa lapangan</td><td><span class="b b-gy">Ops</span></td><td>1.300.000</td><td>1.300.000</td><td>—</td><td>—</td><td><div class="acts"><button class="ib" onclick="editBiaya(this)" title="Edit"><i class="ti ti-edit"></i></button><button class="ib del" onclick="hapusBiaya(this)" title="Hapus"><i class="ti ti-trash"></i></button></div></td></tr>
+              <tr><td style="font-weight:500">Wasit</td><td><span class="b b-gy">Ops</span></td><td>200.000</td><td>200.000</td><td>—</td><td>—</td><td><div class="acts"><button class="ib" onclick="editBiaya(this)" title="Edit"><i class="ti ti-edit"></i></button><button class="ib del" onclick="hapusBiaya(this)" title="Hapus"><i class="ti ti-trash"></i></button></div></td></tr>
+              <tr><td style="font-weight:500">Air + laundry</td><td><span class="b b-gy">Ops</span></td><td>85.000</td><td>85.000</td><td>—</td><td>—</td><td><div class="acts"><button class="ib" onclick="editBiaya(this)" title="Edit"><i class="ti ti-edit"></i></button><button class="ib del" onclick="hapusBiaya(this)" title="Hapus"><i class="ti ti-trash"></i></button></div></td></tr>
+              <tr><td style="font-weight:500">Gimmick voucher</td><td><span class="b b-gy">Ops</span></td><td>29.000</td><td>29.000</td><td>—</td><td>—</td><td><div class="acts"><button class="ib" onclick="editBiaya(this)" title="Edit"><i class="ti ti-edit"></i></button><button class="ib del" onclick="hapusBiaya(this)" title="Hapus"><i class="ti ti-trash"></i></button></div></td></tr>
             </tbody>
             <tfoot><tr><td colspan="2">Total operasional</td><td>Rp 1.614.000</td><td style="color:var(--rd)">Rp 1.614.000</td><td colspan="3"></td></tr></tfoot>
           </table>
@@ -709,7 +713,7 @@ const AUTH = {
               <div style="font-weight:500;min-width:100px">Wayan</div>
               <div style="font-size:14px;font-weight:700;color:var(--am);min-width:90px">Rp 70.000</div>
               <div style="flex:1;font-size:11px;color:var(--mu)">Saldo aktif · dapat dipakai di match ini</div>
-              <div class="acts"><button class="ib"><i class="ti ti-edit"></i></button><button class="ib del"><i class="ti ti-trash"></i></button></div>
+              <div class="acts"><button class="ib" onclick="editDeposit(this)" title="Edit"><i class="ti ti-edit"></i></button><button class="ib del" onclick="hapusDeposit(this)" title="Hapus"><i class="ti ti-trash"></i></button></div>
             </div>
             <div style="border-top:1px solid var(--bd);margin-top:14px;padding-top:14px">
               <div style="font-size:11px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Log transaksi deposit</div>
@@ -1226,15 +1230,33 @@ const MD={
   l44:Array.from({length:44},(_,i)=>'M'+(i+1)),
   d44:[120,80,150,-60,200,180,90,110,75,-80,160,130,100,200,85,95,110,140,87,-45,112,287,144,229,102,243,135,-98,201,163,187,489,243,489,201,249,145,87,60,243,201,87,163,249]
 };
-const SCORERS=[
-  {rank:'🥇',name:'Jayadi',cat:'Umum',gol:34,pct:100},
-  {rank:'🥈',name:'Annas',cat:'BMR',gol:28,pct:82},
-  {rank:'🥉',name:'Hisyam',cat:'SMS',gol:24,pct:70},
-  {rank:'4',name:'Tavano',cat:'Umum',gol:21,pct:62},
-  {rank:'5',name:'Bambang',cat:'Umum',gol:19,pct:56},
-  {rank:'6',name:'Eri',cat:'SMS',gol:16,pct:47},
-  {rank:'7',name:'Wira',cat:'Umum',gol:13,pct:38},
+// Data scorer dari rekap M31-M36 (data resmi dari Sam)
+const SCORERS_ALLTIME=[
+  {rank:'🥇',name:'Annas',cat:'BMR',gol:19,pct:100},
+  {rank:'🥈',name:'Bambang',cat:'Umum',gol:13,pct:68},
+  {rank:'🥉',name:'Jayadi',cat:'Umum',gol:10,pct:53},
+  {rank:'4',name:'Ibnu',cat:'Umum',gol:7,pct:37},
+  {rank:'5',name:'Wasis',cat:'Umum',gol:7,pct:37},
+  {rank:'6',name:'Arsya',cat:'Umum',gol:4,pct:21},
+  {rank:'7',name:'Haidar',cat:'Umum',gol:4,pct:21},
+  {rank:'8',name:'Eri',cat:'SMS',gol:4,pct:21},
+  {rank:'9',name:'Indra',cat:'Umum',gol:4,pct:21},
+  {rank:'10',name:'Jefri',cat:'Umum',gol:4,pct:21},
 ];
+// 2026 = subset dari all time (M35-M36 = game di 2026)
+const SCORERS_2026=[
+  {rank:'🥇',name:'Annas',cat:'BMR',gol:7,pct:100},
+  {rank:'🥈',name:'Wasis',cat:'Umum',gol:6,pct:86},
+  {rank:'🥉',name:'Jayadi',cat:'Umum',gol:2,pct:29},
+  {rank:'4',name:'Indra',cat:'Umum',gol:4,pct:57},
+  {rank:'5',name:'Alfi',cat:'Umum',gol:3,pct:43},
+  {rank:'6',name:'Adib',cat:'Umum',gol:2,pct:29},
+  {rank:'7',name:'Imam',cat:'Umum',gol:2,pct:29},
+  {rank:'8',name:'Ferdi',cat:'Umum',gol:2,pct:29},
+  {rank:'9',name:'Eri',cat:'SMS',gol:1,pct:14},
+  {rank:'10',name:'Rijal',cat:'Umum',gol:1,pct:14},
+];
+let SCORERS = SCORERS_ALLTIME;
 const MATCH_SCORERS=[{rank:1,name:'Jayadi',gol:3,pct:100},{rank:2,name:'Ricky',gol:2,pct:67},{rank:3,name:'Wayan',gol:1,pct:33}];
 
 // Lapangan data per tipe
@@ -1298,6 +1320,14 @@ function switchChart(n,btn){
   const k=n<=12?'12':n<=24?'24':'44';
   if(ci)ci.destroy();
   ci=mkLine('chartMargin',MD['l'+k],MD['d'+k]);
+}
+
+function switchScorer(mode, btn) {
+  btn.closest('.chips').querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  const data = mode === '2026' ? SCORERS_2026 : SCORERS_ALLTIME;
+  SCORERS = data;
+  renderScorer('d-scorer', data);
 }
 
 function renderScorer(id,data){
@@ -1565,10 +1595,15 @@ let isFootball = false;
 
 function setGameMode(mode) {
   isFootball = (mode === 'football');
-  const th = document.getElementById('th-formasi');
+  const th  = document.getElementById('th-formasi');
   const tds = document.querySelectorAll('.td-formasi');
-  if(th) th.style.display = isFootball ? '' : 'none';
-  tds.forEach(td => td.style.display = isFootball ? '' : 'none');
+  if(th) th.style.display = '';  // kolom header selalu visible
+  tds.forEach(td => {
+    const dash = td.querySelector('.formasi-dash');
+    const sel  = td.querySelector('.formasi-sel');
+    if(dash) dash.style.display = isFootball ? 'none' : '';
+    if(sel)  sel.style.display  = isFootball ? ''     : 'none';
+  });
 }
 
 // ── LINE UP VIEW ──
@@ -1705,6 +1740,82 @@ window.addEventListener('DOMContentLoaded', () => {
   if (AUTH.isLoggedIn()) showAdminUI();
   else hideAdminUI();
 });
+
+
+// ── Slot Player: Edit & Hapus ─────────────────────────────
+function editSlotPlayer(btn) {
+  const row = btn.closest('tr');
+  if (!row) return;
+  const cells = row.querySelectorAll('td');
+  const nama  = cells[1] ? cells[1].innerText.trim() : '';
+  // Buka modal edit — pre-fill dengan data baris
+  openModal('m-tambah-player');
+  setTimeout(() => {
+    const modal = document.getElementById('m-tambah-player');
+    if (!modal) return;
+    const inp = modal.querySelector('input[placeholder*="Nama"]') ||
+                modal.querySelector('input[type="text"]');
+    if (inp) inp.value = nama;
+    // Simpan referensi baris untuk update
+    modal._editRow = row;
+    modal._editMode = true;
+    const title = modal.querySelector('.modal-title');
+    if (title) title.textContent = 'Edit Player';
+    const btn2 = modal.querySelector('.btn-prim');
+    if (btn2) btn2.textContent = 'Simpan perubahan';
+  }, 50);
+}
+
+function hapusSlotPlayer(btn) {
+  const row  = btn.closest('tr');
+  const nama = row ? (row.querySelectorAll('td')[1] || {}).innerText : '?';
+  if (!confirm('Hapus ' + (nama||'player ini') + ' dari slot?')) return;
+  if (row) row.remove();
+  // TODO: sync ke Sheets via API.deletePlayer(...)
+}
+
+// ── Biaya Match: Edit & Hapus ─────────────────────────────
+function editBiaya(btn) {
+  const row   = btn.closest('tr');
+  if (!row) return;
+  const cells = row.querySelectorAll('td');
+  openModal('m-tambah-biaya');
+  setTimeout(() => {
+    const modal = document.getElementById('m-tambah-biaya');
+    if (!modal) return;
+    const inps = modal.querySelectorAll('input');
+    if (inps[0]) inps[0].value = cells[0] ? cells[0].innerText : '';
+    if (inps[1]) inps[1].value = cells[2] ? cells[2].innerText.replace(/[^0-9]/g,'') : '';
+    if (inps[2]) inps[2].value = cells[3] ? cells[3].innerText.replace(/[^0-9]/g,'') : '';
+    modal._editRow  = row;
+    modal._editMode = true;
+    const title = modal.querySelector('.modal-title');
+    if (title) title.textContent = 'Edit Biaya';
+  }, 50);
+}
+
+function hapusBiaya(btn) {
+  const row  = btn.closest('tr');
+  const item = row ? (row.querySelectorAll('td')[0] || {}).innerText : '?';
+  if (!confirm('Hapus item biaya: ' + (item||'ini') + '?')) return;
+  if (row) row.remove();
+  // TODO: sync ke Sheets via API.deleteBiaya(...)
+}
+
+// ── Deposit Player: Edit & Hapus ─────────────────────────
+function editDeposit(btn) {
+  const row   = btn.closest('tr') || btn.closest('.dep-row');
+  if (!row) return;
+  openModal('m-tambah-deposit');
+  // TODO: pre-fill form edit deposit
+}
+
+function hapusDeposit(btn) {
+  const row = btn.closest('tr') || btn.closest('.dep-row');
+  if (!confirm('Hapus entri deposit ini?')) return;
+  if (row) row.remove();
+  // TODO: sync ke Sheets via API.deleteDeposit(...)
+}
 
 </script>
 </body>
