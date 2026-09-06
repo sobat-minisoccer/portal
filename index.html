@@ -221,47 +221,41 @@ body{font-family:var(--fn);background:var(--bg);color:var(--tx);font-size:13px;l
 
 .login-wrap{max-width:340px;margin:50px auto;padding:0 20px}
 .login-card{background:var(--su);border:1px solid var(--bd);border-radius:14px;padding:28px}
+</style>
 
-/* ── Dashboard layout fix ── */
-#page-dashboard .g2:first-of-type { display: contents; }
-/* Gunakan CSS grid order untuk reorder cards */
+<style>
+/* Auth: hide admin tabs when not logged in */
+.nav-tab.lock-tab { display: none !important; }
+body.admin-mode .nav-tab.lock-tab { display: flex !important; }
 
-/* ── Hide frequent players ── */
-.freq-grid, [data-section="frequent"] { display: none !important; }
-
-/* ── Admin-only nav tabs ── */
-.nav-tab.admin-only { display: none; }
-.admin-mode .nav-tab.admin-only { display: flex; }
-
-/* ── Match list cards ── */
+/* Match list */
 .match-card { background:var(--su); border:1px solid var(--bd); border-radius:10px;
   padding:14px 16px; margin-bottom:10px; cursor:pointer;
   transition:box-shadow .15s,border-color .15s;
   display:flex; align-items:center; justify-content:space-between; gap:12px; }
 .match-card:hover { box-shadow:0 2px 10px rgba(0,0,0,.08); border-color:var(--nv); }
 .match-card-info { flex:1; min-width:0; }
-.match-card-title { font-size:14px; font-weight:600; color:var(--tx); }
+.match-card-title { font-size:14px; font-weight:600; }
 .match-card-sub   { font-size:11px; color:var(--mu); margin-top:3px; }
-.match-card-meta  { font-size:11px; color:var(--mu); margin-top:5px; display:flex; gap:10px; }
-.match-card-acts  { display:flex; align-items:center; gap:8px; flex-shrink:0; }
-@keyframes spin { to { transform:rotate(360deg); } }
+.match-card-meta  { font-size:11px; color:var(--mu); margin-top:5px; display:flex; gap:12px; }
 
-/* ── Transaksi: list vs detail view ── */
-#trx-list-view { }
-#page-transaksi .cont > .card.trx-detail,
-#page-transaksi .cont > .trx-wrap { display: none; }
-#page-transaksi.detail-mode .cont > .card.trx-detail,
-#page-transaksi.detail-mode .cont > .trx-wrap { display: block; }
-#page-transaksi.detail-mode #trx-list-view { display: none; }
+/* Hide frequent players section */
+#section-freq { display: none; }
+
+/* Transaksi list/detail toggle */
+#trx-list-section { display: block; }
+#trx-detail-section { display: none; }
+body.trx-detail-mode #trx-list-section { display: none; }
+body.trx-detail-mode #trx-detail-section { display: block; }
+
+/* Tombol back di transaksi */
+.btn-back { display:none; }
+body.trx-detail-mode .btn-back { display:inline-flex; }
+body.trx-detail-mode .btn-match-new { display:none; }
 </style>
-<script>
-const GAS_URL='https://script.google.com/macros/s/AKfycbwyhpWM7QmS3cz6MgY1MhwOMswMtgO4ZWMYYX_QzWt8B8Yvy8aW0L8qAgS7-7a75j6-Ag/exec';
-async function gasGet(a,p={}){const u=new URL(GAS_URL);u.searchParams.set('action',a);Object.entries(p).forEach(([k,v])=>u.searchParams.set(k,v));const r=await fetch(u.toString());const d=await r.json();if(d.error)throw new Error(d.error);return d;}
-async function gasPost(a,p={}){const r=await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:a,...p})});const d=await r.json();if(d.error)throw new Error(d.error);return d;}
-const API={getDashboard:()=>gasGet('getDashboard'),getPlayers:()=>gasGet('getPlayers'),getMatches:()=>gasGet('getMatches'),getStokJersey:()=>gasGet('getStokJersey'),getShtm:()=>gasGet('getShtm'),getDeposit:()=>gasGet('getDeposit'),getConfig:()=>gasGet('getConfig'),createMatch:(p)=>gasPost('createMatch',p),closeMatch:(p)=>gasPost('closeMatch',p),addPlayer:(p)=>gasPost('addPlayer',p),updatePlayer:(p)=>gasPost('updatePlayer',p),deletePlayer:(p)=>gasPost('deletePlayer',p),addBiaya:(p)=>gasPost('addBiaya',p),addGol:(p)=>gasPost('addGol',p),flagShtm:(p)=>gasPost('flagShtm',p),useShtm:(p)=>gasPost('useShtm',p),addDeposit:(p)=>gasPost('addDeposit',p),updateStokJersey:(p)=>gasPost('updateStokJersey',p),addNewPlayer:(p)=>gasPost('addNewPlayer',p),updateConfig:(p)=>gasPost('updateConfig',p)};
-const AUTH={PASSWORD:'sms2024',login(pw){if(pw===this.PASSWORD){localStorage.setItem('sms_auth',btoa(pw+Date.now()));return true;}return false;},logout(){localStorage.removeItem('sms_auth');},isLoggedIn(){return!!localStorage.getItem('sms_auth');}};
-</script>
-</head>
+<style>
+#section-freq-wrap > div:first-child { display: none; } /* Sembunyikan card frequent */
+</style></head>
 <body>
 
 <nav class="nav">
@@ -272,8 +266,8 @@ const AUTH={PASSWORD:'sms2024',login(pw){if(pw===this.PASSWORD){localStorage.set
   <div class="nav-tabs">
     <div class="nav-tab active" id="ntab-dashboard" onclick="goPage('dashboard')"><i class="ti ti-layout-dashboard" style="font-size:14px"></i> Dashboard</div>
     <div class="nav-tab" id="ntab-reporting" onclick="goPage('reporting')"><i class="ti ti-chart-bar" style="font-size:14px"></i> Reporting</div>
-    <div id="ntab-transaksi" onclick="goPage('transaksi')" class="nav-tab admin-only"><i class="ti ti-clipboard-list" style="font-size:14px"></i> Transaksi </div>
-    <div id="ntab-admin" onclick="goPage('admin')" class="nav-tab admin-only"><i class="ti ti-settings" style="font-size:14px"></i> Admin </div>
+    <div class="nav-tab lock-tab" id="ntab-transaksi" onclick="goPage('transaksi')"><i class="ti ti-clipboard-list" style="font-size:14px"></i> Transaksi </div>
+    <div class="nav-tab lock-tab" id="ntab-admin" onclick="goPage('admin')"><i class="ti ti-settings" style="font-size:14px"></i> Admin </div>
   </div>
   <div class="nav-right">
     <button id="btn-logout" class="btn-nav" onclick="doLogout()" style="display:none;color:#DC2626"><i class="ti ti-logout" style="font-size:13px"></i> Logout</button>
@@ -352,7 +346,7 @@ const AUTH={PASSWORD:'sms2024',login(pw){if(pw===this.PASSWORD){localStorage.set
         <span class="card-title">Profit per match — Minisoccer vs Football</span>
       </div>
       <!-- Filter tipe event sama dengan pilihan di buat match baru -->
-      <div id="profit-filter-chips" style="padding:8px 14px;border-bottom:1px solid var(--bd);display:flex;gap:6px;flex-wrap:wrap">
+      <div style="padding:8px 14px;border-bottom:1px solid var(--bd);display:flex;gap:6px;flex-wrap:wrap">
         <span class="chip active" onclick="filterTipe('semua',this)">Semua</span>
         <span class="chip" onclick="filterTipe('internal',this)">Internal</span>
         <span class="chip" onclick="filterTipe('join',this)">Join Game</span>
@@ -368,9 +362,9 @@ const AUTH={PASSWORD:'sms2024',login(pw){if(pw===this.PASSWORD){localStorage.set
     </div>
 
     <!-- Frequent + top skor -->
-    <div id="section-frequent" style="display:none">
+    <div id="section-freq-wrap" style="display:flex;flex-direction:column;gap:12px">
       <div class="card" style="margin-bottom:0">
-        <div class="card-hd"><span class="card-title" data-section="frequent">Frequent players — top 9</span></div>
+        <div class="card-hd"><span class="card-title">Frequent players — top 9</span></div>
         <div class="card-body" style="padding:10px">
           <div class="pgrid">
             <div class="pcard"><span class="prk gd">1</span><div class="pav" style="background:#EFF6FF;color:#1D4ED8">MA</div><div class="pinf"><div class="pnm">Malik</div><div class="pmt">SMS · GK</div></div><div class="pcnt">40×</div></div>
@@ -424,15 +418,15 @@ const AUTH={PASSWORD:'sms2024',login(pw){if(pw===this.PASSWORD){localStorage.set
   <div id="rpt-pembayaran" class="tab-p active">
     <div class="fbar"><span class="flbl">Status</span><select><option>Semua</option><option>Lunas</option><option>Sementara</option><option>Walk-in</option><option>Cancel</option></select></div>
     <table class="tbl">
-      <thead><tr><th>Player</th><th>HTM (Rp)</th><th>Label</th><th>Deposit Dipakai</th><th>Metode Bayar</th><th>Jumlah Bayar (Rp)</th><th>Tgl Bayar</th><th>Status</th></tr></thead>
+      <thead><tr><th>Player</th><th>HTM (Rp)</th><th>Label</th><th>Deposit</th><th>Metode</th><th>Jumlah (Rp)</th><th>Tgl Bayar</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td class="pri">Malik</td><td>95.000</td><td><span class="b b-gy">Normal</span></td><td>—</td><td><span class="b b-ac">BCA</span></td><td>95.000</td><td>02/09</td><td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td></tr>
+        <tr><td class="pri">Malik</td><td>95.000</td><td><span class="b b-gy">Normal</span></td><td>—</td><td>95.000</td><td>—</td><td>—</td><td>02/09</td><td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td></tr>
         <tr><td class="pri">Ricky <span class="b b-sh" style="font-size:9px">SHTM</span></td><td>50.000</td><td><span class="b b-sh">SHTM</span></td><td>—</td><td><span class="b b-ac">BSI</span></td><td>50.000</td><td>04/09</td><td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td></tr>
-        <tr><td class="pri">Wayan <span class="b b-dp" style="font-size:9px">Dep 70rb</span></td><td>95.000</td><td><span class="b b-gy">Normal</span></td><td style="color:var(--am);font-weight:500">Rp 70.000</td><td><span class="b b-gy">Cash</span></td><td>25.000</td><td>05/09</td><td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td></tr>
+        <tr><td class="pri">Wayan <span class="b b-dp" style="font-size:9px">Dep 70rb</span></td><td>95.000</td><td><span class="b b-gy">Normal</span></td><td style="color:var(--am)">Rp 70.000</td><td><span class="b b-gy">Cash</span></td><td>25.000</td><td>05/09</td><td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td></tr>
         <tr><td class="pri">Jayadi</td><td>95.000</td><td><span class="b b-gy">Normal</span></td><td>—</td><td><span class="b b-ac">BSI</span></td><td>95.000</td><td>03/09</td><td><span class="b b-gn"><span class="sd sdg"></span>Lunas</span></td></tr>
         <tr><td class="pri">Heru</td><td>95.000</td><td><span class="b b-gy">Normal</span></td><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="b b-am"><span class="sd sda"></span>Sementara</span></td></tr>
       </tbody>
-      <tfoot><tr><td colspan="3">Total terkumpul</td><td style="color:var(--am)">Rp 70.000</td><td colspan="2" style="color:var(--gn);font-weight:600">= Rp 1.530.000</td><td colspan="2"></td></tr></tfoot>
+      <tfoot><tr><td colspan="3">Total terkumpul</td><td style="color:var(--am)">Rp 70.000</td><td></td><td style="color:var(--gn);font-weight:600">= Rp 1.530.000</td><td colspan="2"></td></tr></tfoot>
     </table>
   </div>
   <div id="rpt-operasional" class="tab-p">
@@ -490,26 +484,23 @@ const AUTH={PASSWORD:'sms2024',login(pw){if(pw===this.PASSWORD){localStorage.set
     <button class="btn btn-prim" onclick="openModal('m-match-baru')"><i class="ti ti-plus"></i> Match baru</button>
   </div>
 
-  <!-- LIST VIEW -->
-  <div id="trx-list-view">
-    <div id="match-list-container">
-      <div id="match-list-empty" style="color:var(--mu);font-size:13px;padding:16px 0">
-        <i class="ti ti-loader"></i> Memuat daftar match...
-      </div>
-    </div>
-    <a href="#" onclick="goPage('reporting');return false" style="font-size:12px;color:var(--nv);margin-top:8px;display:inline-block">
-      <i class="ti ti-history" style="font-size:11px"></i> Lihat match selesai →
-    </a>
+  <!-- ── TRANSAKSI LIST VIEW ── -->
+  <div id="trx-list-section">
+    <div id="match-list-cards"></div>
+    <div id="match-list-empty" style="color:var(--mu);font-size:13px;padding:12px 0"></div>
+    <a href="#" onclick="goPage('reporting');return false" style="font-size:12px;color:var(--nv);margin-top:4px;display:inline-block"><i class="ti ti-history" style="font-size:11px"></i> Lihat match selesai →</a>
   </div>
 
-  <div class="card trx-detail">
+  <!-- ── TRANSAKSI DETAIL VIEW ── -->
+  <div id="trx-detail-section">
+    <div style="margin-bottom:10px">
+      <button class="btn btn-sm" onclick="backToList()"><i class="ti ti-arrow-left" style="font-size:11px"></i> Semua match</button>
+    </div>
+  <div class="card">
     <div class="mhd">
       <div>
-        <button class="btn btn-sm" onclick="backToMatchList()" style="margin-bottom:6px;font-size:11px">
-          <i class="ti ti-arrow-left" style="font-size:10px"></i> Semua match
-        </button>
-        <div class="mhd-title" style="font-size:14px;font-weight:600">6 September 2026 — Internal SMS</div>
-        <div class="mhd-sub" style="font-size:11px;color:var(--mu);margin-top:2px">Futsal Menteng · Lapangan Kecil · HTM Rp 95.000 · GK Rp 35.000</div>
+        <div style="font-size:14px;font-weight:600">6 September 2026 — Internal SMS</div>
+        <div style="font-size:11px;color:var(--mu);margin-top:2px">Futsal Menteng · Lapangan Kecil · HTM Rp 95.000 · GK Rp 35.000</div>
       </div>
       <div style="display:flex;align-items:center;gap:8px">
         <span class="b b-gn" style="font-size:12px;padding:5px 10px"><span class="sd sdg"></span>Match aktif</span>
@@ -523,7 +514,7 @@ const AUTH={PASSWORD:'sms2024',login(pw){if(pw===this.PASSWORD){localStorage.set
       <div class="mb-cell profit"><div class="mb-lbl" style="color:var(--gn)">Margin proyeksi</div><div class="mb-val" style="color:var(--gn)">+Rp 11.000</div></div>
     </div>
 
-    <div class="trx-wrap trx-detail" style="border-radius:0;border:none;border-top:1px solid var(--bd)">
+    <div class="trx-wrap" style="border-radius:0;border:none;border-top:1px solid var(--bd)">
       <div class="trx-side">
         <div class="trx-st active" onclick="trxTab('slot',this)"><i class="ti ti-users" style="font-size:13px"></i> Slot player</div>
         <div class="trx-st" onclick="trxTab('biaya',this)"><i class="ti ti-receipt" style="font-size:13px"></i> Biaya match</div>
@@ -772,6 +763,7 @@ const AUTH={PASSWORD:'sms2024',login(pw){if(pw===this.PASSWORD){localStorage.set
       </div>
     </div>
   </div>
+  </div><!-- /trx-detail-section -->
 </div>
 </div>
 
@@ -962,7 +954,7 @@ const AUTH={PASSWORD:'sms2024',login(pw){if(pw===this.PASSWORD){localStorage.set
       <div style="font-size:16px;font-weight:600;text-align:center;margin-bottom:4px">Login admin</div>
       <div style="font-size:12px;color:var(--mu);text-align:center;margin-bottom:20px">Akses Transaksi dan menu Admin</div>
       <div class="fg"><div class="fl">Email</div><input type="email" placeholder="sobat.minisoccer@gmail.com"></div>
-      <div class="fg" style="margin-bottom:18px"><div class="fl">Password</div><input type="password" placeholder="Password admin" id="login-password"></div>
+      <div class="fg" style="margin-bottom:18px"><div class="fl">Password</div><input type="password" placeholder="Password admin" id="pw-admin"></div>
       <button class="btn btn-prim" style="width:100%;justify-content:center;padding:9px" onclick="doLogin()"><i class="ti ti-login"></i> Masuk sebagai admin</button>
       <div style="text-align:center;margin-top:12px"><a href="#" onclick="goPage('dashboard')" style="font-size:12px;color:var(--mu);text-decoration:none">← Kembali ke dashboard</a></div>
     </div>
@@ -1259,12 +1251,10 @@ const SCORERS_2026=[
   {rank:'🥈',name:'Wasis',cat:'Umum',gol:6,pct:86},
   {rank:'3',name:'Indra',cat:'Umum',gol:4,pct:57},
   {rank:'4',name:'Alfi',cat:'Umum',gol:3,pct:43},
-  {rank:'5',name:'Adib',cat:'Umum',gol:2,pct:29},
-  {rank:'6',name:'Jayadi',cat:'Umum',gol:2,pct:29},
-  {rank:'7',name:'Imam',cat:'Umum',gol:2,pct:29},
-  {rank:'8',name:'Ferdi',cat:'Umum',gol:2,pct:29},
-  {rank:'9',name:'Eri',cat:'SMS',gol:1,pct:14},
-  {rank:'10',name:'Rijal',cat:'Umum',gol:1,pct:14},
+  {rank:'5',name:'Jayadi',cat:'Umum',gol:2,pct:29},
+  {rank:'6',name:'Ferdi',cat:'Umum',gol:2,pct:29},
+  {rank:'7',name:'Eri',cat:'SMS',gol:1,pct:14},
+  {rank:'8',name:'Rijal',cat:'Umum',gol:1,pct:14},
 ];
 let SCORERS=SCORERS_ALLTIME;
 const MATCH_SCORERS=[{rank:1,name:'Jayadi',gol:3,pct:100},{rank:2,name:'Ricky',gol:2,pct:67},{rank:3,name:'Wayan',gol:1,pct:33}];
@@ -1310,7 +1300,7 @@ function mkLapChart(kecil,besar){ // kecil=Minisoccer, besar=Football
 }
 
 function filterTipe(tipe,btn){
-  document.querySelectorAll('#profit-filter-chips .chip').forEach(c=>c.classList.remove('active'));
+  btn.closest('.card').querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
   btn.classList.add('active');
   const d=LAP_DATA[tipe]||LAP_DATA.semua;
   mkLapChart(d.mini,d.foot);
@@ -1336,11 +1326,6 @@ function renderScorer(id,data){
 }
 
 function goPage(id){
-  if(id==='transaksi'){
-    const pg = document.getElementById('page-transaksi');
-    if(pg) pg.classList.remove('detail-mode');
-    setTimeout(renderMatchList, 50);
-  }
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
@@ -1600,21 +1585,14 @@ let isFootball = false;
 
 function setGameMode(mode) {
   isFootball = (mode === 'football');
-  const th  = document.getElementById('th-formasi');
+  const th = document.getElementById('th-formasi');
   if(th) th.style.display = '';
   document.querySelectorAll('.td-formasi').forEach(td => {
-    const sel  = td.querySelector('select.formasi-sel');
-    // Tampilkan "-" jika Minisoccer, tampilkan select jika Football
-    if(!td._dashSpan) {
-      const span = document.createElement('span');
-      span.className = 'formasi-dash';
-      span.style.cssText = 'color:var(--mu);font-size:12px';
-      span.textContent = '—';
-      td.insertBefore(span, td.firstChild);
-      td._dashSpan = span;
-    }
-    if(sel) sel.style.display  = isFootball ? '' : 'none';
-    td._dashSpan.style.display = isFootball ? 'none' : '';
+    let dash = td.querySelector('.f-dash');
+    if(!dash){ dash=document.createElement('span'); dash.className='f-dash'; dash.style.cssText='color:var(--mu);font-size:12px'; dash.textContent='—'; td.insertBefore(dash,td.firstChild); }
+    const sel = td.querySelector('select');
+    if(sel) sel.style.display = isFootball?'':'none';
+    dash.style.display = isFootball?'none':'';
   });
 }
 
@@ -1709,207 +1687,94 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+</script>
 
-// ══════════════════════════════════════════════════════
-// AUTH & NAV
-// ══════════════════════════════════════════════════════
-function showAdminUI() {
-  document.body.classList.add('admin-mode');
-  const lo = document.getElementById('btn-logout');
-  const li = document.getElementById('btn-login');
-  if(lo) lo.style.display = 'flex';
-  if(li) li.style.display = 'none';
-}
-function hideAdminUI() {
-  document.body.classList.remove('admin-mode');
-  const lo = document.getElementById('btn-logout');
-  const li = document.getElementById('btn-login');
-  if(lo) lo.style.display = 'none';
-  if(li) li.style.display = 'flex';
-}
-function doLogin() {
-  const pw = (document.getElementById('login-password') ||
-              document.querySelector('#page-login input[type=password]'));
-  if(!pw) return;
-  if(AUTH.login(pw.value.trim())) {
-    showAdminUI();
-    goPage('transaksi');
-  } else {
-    alert('Password salah.');
-    pw.value = ''; pw.focus();
-  }
-}
-function doLogout() {
-  AUTH.logout();
-  hideAdminUI();
-  goPage('dashboard');
-}
+<script>
+// ── GAS API ──────────────────────────────────────────────
+const GAS_URL='https://script.google.com/macros/s/AKfycbwyhpWM7QmS3cz6MgY1MhwOMswMtgO4ZWMYYX_QzWt8B8Yvy8aW0L8qAgS7-7a75j6-Ag/exec';
+async function gasGet(a,p={}){const u=new URL(GAS_URL);u.searchParams.set('action',a);Object.entries(p).forEach(([k,v])=>u.searchParams.set(k,v));const r=await fetch(u);const d=await r.json();if(d.error)throw new Error(d.error);return d;}
+async function gasPost(a,p={}){const r=await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:a,...p})});const d=await r.json();if(d.error)throw new Error(d.error);return d;}
+const API={getDashboard:()=>gasGet('getDashboard'),getPlayers:()=>gasGet('getPlayers'),getMatches:()=>gasGet('getMatches'),getStokJersey:()=>gasGet('getStokJersey'),getShtm:()=>gasGet('getShtm'),getDeposit:()=>gasGet('getDeposit'),getConfig:()=>gasGet('getConfig'),createMatch:p=>gasPost('createMatch',p),closeMatch:p=>gasPost('closeMatch',p),addPlayer:p=>gasPost('addPlayer',p),updatePlayer:p=>gasPost('updatePlayer',p),deletePlayer:p=>gasPost('deletePlayer',p),addBiaya:p=>gasPost('addBiaya',p),addGol:p=>gasPost('addGol',p),flagShtm:p=>gasPost('flagShtm',p),addDeposit:p=>gasPost('addDeposit',p),updateStokJersey:p=>gasPost('updateStokJersey',p),addNewPlayer:p=>gasPost('addNewPlayer',p),updateConfig:p=>gasPost('updateConfig',p)};
 
-// ══════════════════════════════════════════════════════
-// SCORER TOGGLE
-// ══════════════════════════════════════════════════════
-function switchScorer(mode, btn) {
-  btn.closest('.chips').querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-  btn.classList.add('active');
-  SCORERS = mode === '2026' ? SCORERS_2026 : SCORERS_ALLTIME;
-  renderScorer('d-scorer', SCORERS);
-}
+// ── AUTH ─────────────────────────────────────────────────
+const AUTH={PASSWORD:'sms2024',login(pw){if(pw===this.PASSWORD){localStorage.setItem('sms_auth',btoa(pw+Date.now()));return true;}return false;},logout(){localStorage.removeItem('sms_auth');},isLoggedIn(){return!!localStorage.getItem('sms_auth');}};
+function showAdminUI(){document.body.classList.add('admin-mode');document.getElementById('btn-logout').style.display='flex';document.getElementById('btn-login').style.display='none';}
+function hideAdminUI(){document.body.classList.remove('admin-mode');document.getElementById('btn-logout').style.display='none';document.getElementById('btn-login').style.display='flex';}
+function doLogin(){const pw=document.getElementById('pw-admin');if(!pw)return;if(AUTH.login(pw.value.trim())){showAdminUI();goPage('transaksi');}else{alert('Password salah.');pw.value='';pw.focus();}}
+function doLogout(){AUTH.logout();hideAdminUI();goPage('dashboard');}
 
-// ══════════════════════════════════════════════════════
-// MULTI-MATCH LIST
-// ══════════════════════════════════════════════════════
-let matchList = [{
-  id:'match-20260906-001', tanggal:'6 September 2026', tipeEvent:'Internal SMS',
-  jenisGame:'Minisoccer (7 vs 7)', venue:'Futsal Menteng', tipeLapangan:'Kecil',
-  htmPlayer:95000, htmGk:35000, kuotaKiper:4, kuotaField:24,
-  status:'aktif', slotTerisi:6, salesPasti:1530000, salesSem:95000, totalCost:1614000,
-}];
-let activeMatchId = null;
+// ── SCORER ───────────────────────────────────────────────
+function switchScorer(mode,btn){btn.closest('.chips').querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));btn.classList.add('active');SCORERS=mode==='2026'?SCORERS_2026:SCORERS_ALLTIME;renderScorer('d-scorer',SCORERS);}
 
-function fmtNum(n) { return Number(n||0).toLocaleString('id-ID'); }
-
-function renderMatchList() {
-  const c = document.getElementById('match-list-container');
-  const e = document.getElementById('match-list-empty');
-  if(!c) return;
-  const aktif = matchList.filter(m=>m.status==='aktif');
-  if(!aktif.length) {
-    if(e) { e.innerHTML='Belum ada match aktif. Klik <b>+ Match baru</b> untuk mulai.'; e.style.display=''; }
-    c.innerHTML=''; return;
-  }
-  if(e) e.style.display='none';
-  c.innerHTML = aktif.map(m=>{
-    const kuota = m.kuotaKiper + m.kuotaField;
-    const margin = m.salesPasti - m.totalCost;
-    const mc = margin>=0?'var(--gn)':'var(--rd)';
-    const mp = margin>=0?'+':'';
-    return `<div class="match-card" onclick="openMatch('${m.id}')">
+// ── MULTI-MATCH ───────────────────────────────────────────
+let matchList=[{id:'match-20260906-001',tanggal:'6 September 2026',tipeEvent:'Internal SMS',jenisGame:'Minisoccer (7 vs 7)',venue:'Futsal Menteng',tipeLapangan:'Kecil',htmPlayer:95000,htmGk:35000,kuotaKiper:4,kuotaField:24,status:'aktif',slotTerisi:6,salesPasti:1530000,salesSem:95000,totalCost:1614000}];
+let activeMatchId=null;
+function fmtNum(n){return Number(n||0).toLocaleString('id-ID');}
+function renderMatchList(){
+  const c=document.getElementById('match-list-cards');
+  const e=document.getElementById('match-list-empty');
+  if(!c)return;
+  const aktif=matchList.filter(m=>m.status==='aktif');
+  if(!aktif.length){if(e){e.style.display='';e.innerHTML='Belum ada match aktif. Klik <b>+ Match baru</b>.';}c.innerHTML='';return;}
+  if(e)e.style.display='none';
+  c.innerHTML=aktif.map(m=>{
+    const kuota=m.kuotaKiper+m.kuotaField;
+    const margin=m.salesPasti-m.totalCost;
+    const mc=margin>=0?'var(--gn)':'var(--rd)';
+    return `<div class="match-card" onclick="openMatchDetail('${m.id}')">
       <div class="match-card-info">
         <div class="match-card-title">${m.tanggal} — ${m.tipeEvent}</div>
         <div class="match-card-sub">${m.venue} · ${m.tipeLapangan} · HTM Rp ${fmtNum(m.htmPlayer)} · GK Rp ${fmtNum(m.htmGk)}</div>
         <div class="match-card-meta">
           <span>⚽ ${m.slotTerisi||0}/${kuota} player</span>
-          <span style="color:${mc};font-weight:600">Margin proyeksi: ${mp}Rp ${fmtNum(Math.abs(margin))}</span>
+          <span style="color:${mc};font-weight:600">Margin: ${margin>=0?'+':''}Rp ${fmtNum(Math.abs(margin))}</span>
         </div>
       </div>
-      <div class="match-card-acts">
+      <div style="display:flex;align-items:center;gap:8px">
         <span class="b b-gn" style="font-size:11px;padding:4px 9px"><span class="sd sdg"></span>Aktif</span>
         <i class="ti ti-chevron-right" style="color:var(--mu)"></i>
       </div>
     </div>`;
   }).join('');
 }
-
-function openMatch(matchId) {
-  const pg = document.getElementById('page-transaksi');
-  if(pg) pg.classList.add('detail-mode');
-  const m = matchList.find(x=>x.id===matchId);
-  if(!m) return;
-  activeMatchId = matchId;
-  const mhd = document.querySelector('#page-transaksi .mhd > div:first-child');
-  if(mhd) {
-    mhd.querySelector('.mhd-title') && (mhd.querySelector('.mhd-title').textContent = m.tanggal+' — '+m.tipeEvent);
-    mhd.querySelector('.mhd-sub')   && (mhd.querySelector('.mhd-sub').textContent   = m.venue+' · Lapangan '+m.tipeLapangan+' · HTM Rp '+fmtNum(m.htmPlayer)+' · GK Rp '+fmtNum(m.htmGk));
-  }
-  const lv = document.getElementById('trx-list-view');
-  const dv = document.querySelector('#page-transaksi .card.match-detail, #page-transaksi > .cont > .card');
-  if(lv) lv.style.display = 'none';
-  // Tampilkan detail section
-  const allCards = document.querySelectorAll('#page-transaksi .cont > .card, #page-transaksi .cont > .trx-wrap');
-  allCards.forEach(el => { if(!el.id || el.id !== 'trx-list-view') el.style.display = ''; });
-  setGameMode(m.jenisGame.includes('Football')?'football':'mini');
+function openMatchDetail(id){
+  activeMatchId=id;
+  document.body.classList.add('trx-detail-mode');
 }
-
-function backToMatchList() {
-  const pg = document.getElementById('page-transaksi');
-  if(pg) pg.classList.remove('detail-mode');
-  activeMatchId = null;
-  const lv = document.getElementById('trx-list-view');
-  if(lv) lv.style.display = '';
-  // Sembunyikan detail cards
-  const allCards = document.querySelectorAll('#page-transaksi .cont > .card, #page-transaksi .cont > .trx-wrap');
-  allCards.forEach(el => { if(!el.id || el.id !== 'trx-list-view') el.style.display = 'none'; });
+function backToList(){
+  activeMatchId=null;
+  document.body.classList.remove('trx-detail-mode');
   renderMatchList();
 }
-
-function submitMatchBaru() {
-  const modal = document.getElementById('m-match-baru');
-  if(!modal) return;
-  const tglEl    = modal.querySelector('input[type=date]');
-  const selects  = modal.querySelectorAll('select');
-  const numInps  = modal.querySelectorAll('input[type=number]');
-  const venueEl  = modal.querySelector('input[type=text]');
-  const tgl      = tglEl ? tglEl.value : '';
-  const tglDate  = tgl ? new Date(tgl) : new Date();
-  const tglStr   = tglDate.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
-  const newMatch = {
-    id          : 'match-'+tgl.replace(/-/g,'')+'-'+String(matchList.length+1).padStart(3,'0'),
-    tanggal     : tglStr,
-    jenisGame   : selects[0]?.value || 'Minisoccer (7 vs 7)',
-    tipeLapangan: selects[1]?.value || 'Kecil',
-    tipeEvent   : selects[2]?.value || 'Internal SMS',
-    venue       : venueEl?.value || '—',
-    htmPlayer   : parseInt(numInps[0]?.value || 95000),
-    htmGk       : parseInt(numInps[1]?.value || 35000),
-    kuotaKiper  : parseInt(numInps[2]?.value || 4),
-    kuotaField  : parseInt(numInps[3]?.value || 24),
-    status:'aktif', slotTerisi:0, salesPasti:0, salesSem:0, totalCost:0,
-  };
-  matchList.push(newMatch);
+function submitMatchBaru(){
+  const modal=document.getElementById('m-match-baru');
+  if(!modal)return;
+  const tglEl=modal.querySelector('input[type=date]');
+  const sels=modal.querySelectorAll('select');
+  const nums=modal.querySelectorAll('input[type=number]');
+  const venue=modal.querySelector('input[type=text]');
+  const tgl=tglEl?tglEl.value:'';
+  const d=tgl?new Date(tgl):new Date();
+  const tglStr=d.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+  matchList.push({id:'match-'+tgl.replace(/-/g,'')+'-'+String(matchList.length+1).padStart(3,'0'),tanggal:tglStr,jenisGame:sels[0]?.value||'Minisoccer (7 vs 7)',tipeLapangan:sels[1]?.value||'Kecil',tipeEvent:sels[2]?.value||'Internal SMS',venue:venue?.value||'—',htmPlayer:parseInt(nums[0]?.value||95000),htmGk:parseInt(nums[1]?.value||35000),kuotaKiper:parseInt(nums[2]?.value||4),kuotaField:parseInt(nums[3]?.value||24),status:'aktif',slotTerisi:0,salesPasti:0,salesSem:0,totalCost:0});
   closeModal('m-match-baru');
   renderMatchList();
 }
+function tutupMatch(){if(!activeMatchId)return;const i=matchList.findIndex(m=>m.id===activeMatchId);if(i>=0)matchList[i].status='tutup';closeModal('m-tutup-match');backToList();}
 
-function tutupMatch() {
-  if(!activeMatchId) return;
-  const idx = matchList.findIndex(m=>m.id===activeMatchId);
-  if(idx>=0) matchList[idx].status = 'tutup';
-  closeModal('m-tutup-match');
-  backToMatchList();
-}
+// ── SLOT/BIAYA/DEPOSIT ACTIONS ────────────────────────────
+function editSlotPlayer(btn){const row=btn.closest('tr');const nama=row?.querySelectorAll('td')[1]?.innerText?.trim()||'';openModal('m-tambah-player');setTimeout(()=>{const inp=document.querySelector('#m-tambah-player input[type=text]');if(inp)inp.value=nama;},50);}
+function hapusSlotPlayer(btn){const row=btn.closest('tr');const nama=row?.querySelectorAll('td')[1]?.innerText||'player';if(confirm('Hapus '+nama+'?'))row?.remove();}
+function editBiaya(btn){const row=btn.closest('tr');openModal('m-tambah-biaya');setTimeout(()=>{const inp=document.querySelectorAll('#m-tambah-biaya input');if(inp[0])inp[0].value=row?.querySelectorAll('td')[0]?.innerText||'';},50);}
+function hapusBiaya(btn){if(confirm('Hapus item biaya ini?'))btn.closest('tr')?.remove();}
+function editDeposit(btn){openModal('m-tambah-deposit');}
+function hapusDeposit(btn){if(confirm('Hapus entri deposit?'))btn.closest('tr')?.remove();}
 
-// ══════════════════════════════════════════════════════
-// SLOT / BIAYA / DEPOSIT ACTIONS
-// ══════════════════════════════════════════════════════
-function editSlotPlayer(btn) {
-  const row = btn.closest('tr');
-  if(!row) return;
-  const nama = row.querySelectorAll('td')[1]?.innerText?.trim() || '';
-  openModal('m-tambah-player');
-  setTimeout(()=>{
-    const inp = document.querySelector('#m-tambah-player input[type=text]');
-    if(inp) inp.value = nama;
-  },50);
-}
-function hapusSlotPlayer(btn) {
-  const row = btn.closest('tr');
-  const nama = row?.querySelectorAll('td')[1]?.innerText || 'player ini';
-  if(confirm('Hapus '+nama+' dari slot?')) row?.remove();
-}
-function editBiaya(btn) {
-  const row = btn.closest('tr');
-  openModal('m-tambah-biaya');
-  setTimeout(()=>{
-    const inps = document.querySelectorAll('#m-tambah-biaya input');
-    if(row && inps[0]) inps[0].value = row.querySelectorAll('td')[0]?.innerText||'';
-  },50);
-}
-function hapusBiaya(btn) {
-  if(confirm('Hapus item biaya ini?')) btn.closest('tr')?.remove();
-}
-function editDeposit(btn) { openModal('m-tambah-deposit'); }
-function hapusDeposit(btn) {
-  if(confirm('Hapus entri deposit ini?')) btn.closest('tr')?.remove();
-}
-
-// ══════════════════════════════════════════════════════
-// INIT saat halaman load
-// ══════════════════════════════════════════════════════
-window.addEventListener('DOMContentLoaded', ()=>{
-  // Auth state
-  if(AUTH.isLoggedIn()) showAdminUI(); else hideAdminUI();
+// ── INIT ─────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  if(AUTH.isLoggedIn())showAdminUI();else hideAdminUI();
 });
-
 </script>
+
 </body>
 </html>
