@@ -221,6 +221,31 @@ body{font-family:var(--fn);background:var(--bg);color:var(--tx);font-size:13px;l
 
 .login-wrap{max-width:340px;margin:50px auto;padding:0 20px}
 .login-card{background:var(--su);border:1px solid var(--bd);border-radius:14px;padding:28px}
+
+/* ── Match list cards ── */
+.match-card {
+  background: var(--su);
+  border: 1px solid var(--bd);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: box-shadow .15s, border-color .15s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.match-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,.08); border-color: var(--nv); }
+.match-card-info { flex: 1; min-width: 0; }
+.match-card-title { font-size:14px; font-weight:600; color:var(--tx); }
+.match-card-sub   { font-size:11px; color:var(--mu); margin-top:3px; }
+.match-card-meta  { font-size:11px; color:var(--mu); margin-top:5px; display:flex; gap:10px; }
+.match-card-acts  { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.match-card-slot  { font-size:12px; font-weight:600; color:var(--nv);
+                    background:var(--su2); padding:4px 10px; border-radius:20px; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
 </style>
 
 <script>
@@ -487,26 +512,49 @@ const AUTH = {
     <div><div class="pg-title">Transaksi match</div><div class="pg-sub">Input dan kelola match aktif</div></div>
     <button class="btn btn-prim" onclick="openModal('m-match-baru')"><i class="ti ti-plus"></i> Match baru</button>
   </div>
-  <div class="card">
-    <div class="mhd">
-      <div>
-        <div style="font-size:14px;font-weight:600">6 September 2026 — Internal SMS</div>
-        <div style="font-size:11px;color:var(--mu);margin-top:2px">Futsal Menteng · Lapangan Kecil · HTM Rp 95.000 · GK Rp 35.000</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <span class="b b-gn" style="font-size:12px;padding:5px 10px"><span class="sd sdg"></span>Match aktif</span>
-        <button class="btn btn-dng" onclick="openModal('m-tutup-match')"><i class="ti ti-lock"></i> Tutup match</button>
-      </div>
-    </div>
-    <div class="mb-wrap">
-      <div class="mb-cell"><div class="mb-lbl">Sales pasti (Lunas)</div><div class="mb-val" style="color:var(--nv)">Rp 1.530.000</div></div>
-      <div class="mb-cell"><div class="mb-lbl">Sales estimasi (Sementara)</div><div class="mb-val" style="color:var(--am)">Rp 95.000</div></div>
-      <div class="mb-cell"><div class="mb-lbl">Total cost (rencana)</div><div class="mb-val" style="color:var(--rd)">Rp 1.614.000</div></div>
-      <div class="mb-cell profit"><div class="mb-lbl" style="color:var(--gn)">Margin proyeksi</div><div class="mb-val" style="color:var(--gn)">+Rp 11.000</div></div>
-    </div>
 
-    <div class="trx-wrap" style="border-radius:0;border:none;border-top:1px solid var(--bd)">
-      <div class="trx-side">
+  <!-- ── LIST VIEW: daftar match aktif ── -->
+  <div id="trx-list-view">
+    <div id="match-list-container">
+      <!-- Match cards dirender oleh JS dari matchList[] -->
+      <!-- Placeholder loading -->
+      <div style="color:var(--mu);font-size:13px;padding:16px 0" id="match-list-empty">
+        <i class="ti ti-loader" style="animation:spin 1s linear infinite"></i> Memuat daftar match...
+      </div>
+    </div>
+    <div style="margin-top:8px">
+      <a href="#" onclick="goPage('reporting');return false" style="font-size:12px;color:var(--nv)">
+        <i class="ti ti-history" style="font-size:11px"></i> Lihat match selesai →
+      </a>
+    </div>
+  </div>
+
+  <!-- ── DETAIL VIEW: tab match yang dipilih ── -->
+  <div id="trx-detail-view" style="display:none">
+    <!-- Match header (diisi JS) -->
+    <div class="card" style="margin-bottom:12px" id="trx-detail-header">
+      <div class="mhd">
+        <div>
+          <button class="btn btn-sm" onclick="backToMatchList()" style="margin-bottom:6px">
+            <i class="ti ti-arrow-left" style="font-size:11px"></i> Semua match
+          </button>
+          <div style="font-size:14px;font-weight:600" id="trx-match-title">—</div>
+          <div style="font-size:11px;color:var(--mu);margin-top:2px" id="trx-match-sub">—</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="b b-gn" style="font-size:12px;padding:5px 10px"><span class="sd sdg"></span>Match aktif</span>
+          <button class="btn btn-dng" onclick="openModal('m-tutup-match')"><i class="ti ti-lock"></i> Tutup match</button>
+        </div>
+      </div>
+      <div class="mb-wrap" id="trx-estimasi">
+        <div class="mb-cell"><div class="mb-lbl">Sales pasti (Lunas)</div><div class="mb-val" style="color:var(--nv)" id="est-sales-pasti">Rp —</div></div>
+        <div class="mb-cell"><div class="mb-lbl">Sales estimasi (Sementara)</div><div class="mb-val" style="color:var(--am)" id="est-sales-sem">Rp —</div></div>
+        <div class="mb-cell"><div class="mb-lbl">Total cost (rencana)</div><div class="mb-val" style="color:var(--rd)" id="est-cost">Rp —</div></div>
+        <div class="mb-cell profit"><div class="mb-lbl" style="color:var(--gn)">Margin proyeksi</div><div class="mb-val" style="color:var(--gn)" id="est-margin">—</div></div>
+      </div>
+    </div>
+    <!-- Tab sidebar + panels (existing) -->
+    <div class="trx-side">
         <div class="trx-st active" onclick="trxTab('slot',this)"><i class="ti ti-users" style="font-size:13px"></i> Slot player</div>
         <div class="trx-st" onclick="trxTab('biaya',this)"><i class="ti ti-receipt" style="font-size:13px"></i> Biaya match</div>
         <div class="trx-st" onclick="trxTab('deposit',this)"><i class="ti ti-wallet" style="font-size:13px"></i> Deposit player</div>
@@ -761,9 +809,9 @@ const AUTH = {
   </div>
 </div>
 </div>
-
-<!-- ══════════════ ADMIN ══════════════ -->
-<div id="page-admin" class="page">
+  </div>
+</div>
+</div>id="page-admin" class="page">
 <div class="cont">
   <div class="pg-hd">
     <div><div class="pg-title">Admin</div><div class="pg-sub">Kelola stok jersey, SHTM, konfigurasi sistem</div></div>
@@ -1009,7 +1057,7 @@ const AUTH = {
         <div class="fg"><div class="fl">Kuota Field (Player)</div><input type="number" value="24" min="1" placeholder="mis. 24"></div>
       </div>
     </div>
-    <div class="modal-ft"><button class="btn" onclick="closeModal('m-match-baru')">Batal</button><button class="btn btn-prim"><i class="ti ti-check"></i> Buat match</button></div>
+    <div class="modal-ft"><button class="btn" onclick="closeModal('m-match-baru')">Batal</button><button class="btn btn-prim" onclick="submitMatchBaru()"><i class="ti ti-check"></i> Buat match</button></div>
   </div>
 </div>
 
@@ -1026,7 +1074,7 @@ const AUTH = {
       </div>
       <div class="info info-gn"><i class="ti ti-file-text"></i> PDF laporan otomatis digenerate setelah match ditutup.</div>
     </div>
-    <div class="modal-ft"><button class="btn" onclick="closeModal('m-tutup-match')">Batal</button><button class="btn btn-dng"><i class="ti ti-lock"></i> Ya, tutup match</button></div>
+    <div class="modal-ft"><button class="btn" onclick="closeModal('m-tutup-match')">Batal</button><button class="btn btn-dng" onclick="tutupMatch()"><i class="ti ti-lock"></i> Ya, tutup match</button></div>
   </div>
 </div>
 
@@ -1336,6 +1384,14 @@ function renderScorer(id,data){
 }
 
 function goPage(id){
+  if(id==='transaksi'){
+    // Selalu mulai dari list view
+    const lv = document.getElementById('trx-list-view');
+    const dv = document.getElementById('trx-detail-view');
+    if(lv) lv.style.display = '';
+    if(dv) dv.style.display = 'none';
+    setTimeout(renderMatchList, 50);
+  }
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
@@ -1815,6 +1871,178 @@ function hapusDeposit(btn) {
   if (!confirm('Hapus entri deposit ini?')) return;
   if (row) row.remove();
   // TODO: sync ke Sheets via API.deleteDeposit(...)
+}
+
+
+// ══════════════════════════════════════════════════════
+// MATCH LIST — Multi-match support (Opsi B)
+// ══════════════════════════════════════════════════════
+let matchList = [
+  // Data awal — 1 match aktif (6 Sept, data dummy)
+  {
+    id: 'match-20260906-001',
+    tanggal: '6 September 2026',
+    tipeEvent: 'Internal SMS',
+    jenisGame: 'Minisoccer (7 vs 7)',
+    venue: 'Futsal Menteng',
+    tipeLapangan: 'Kecil',
+    htmPlayer: 95000,
+    htmGk: 35000,
+    kuotaKiper: 4,
+    kuotaField: 24,
+    status: 'aktif',
+    slotTerisi: 6,
+    salesPasti: 1530000,
+    salesSem: 95000,
+    totalCost: 1614000,
+  }
+];
+let activeMatchId = null;
+
+function renderMatchList() {
+  const container = document.getElementById('match-list-container');
+  const empty     = document.getElementById('match-list-empty');
+  if (!container) return;
+
+  const aktif = matchList.filter(m => m.status === 'aktif');
+  if (aktif.length === 0) {
+    empty.innerHTML = '<span style="color:var(--mu)">Belum ada match aktif. Klik <b>+ Match baru</b> untuk mulai.</span>';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  container.innerHTML = aktif.map(m => {
+    const margin   = (m.salesPasti + m.salesSem) - m.totalCost;
+    const mColor   = margin >= 0 ? 'var(--gn)' : 'var(--rd)';
+    const mPrefix  = margin >= 0 ? '+' : '';
+    const kuota    = m.kuotaKiper + m.kuotaField;
+    return `
+    <div class="match-card" onclick="openMatch('${m.id}')">
+      <div class="match-card-info">
+        <div class="match-card-title">${m.tanggal} — ${m.tipeEvent}</div>
+        <div class="match-card-sub">${m.venue} · ${m.tipeLapangan} · HTM Rp ${fmtNum(m.htmPlayer)} · GK Rp ${fmtNum(m.htmGk)}</div>
+        <div class="match-card-meta">
+          <span><i class="ti ti-users" style="font-size:10px"></i> ${m.slotTerisi || 0}/${kuota} player</span>
+          <span style="color:${mColor};font-weight:600">Margin proyeksi: ${mPrefix}Rp ${fmtNum(Math.abs(margin))}</span>
+        </div>
+      </div>
+      <div class="match-card-acts">
+        <span class="match-card-slot">${m.jenisGame.includes('Football') ? '⚽ Football' : '🏃 Mini'}</span>
+        <span class="b b-gn" style="font-size:11px;padding:4px 9px"><span class="sd sdg"></span>Aktif</span>
+        <i class="ti ti-chevron-right" style="color:var(--mu);font-size:14px"></i>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openMatch(matchId) {
+  const m = matchList.find(x => x.id === matchId);
+  if (!m) return;
+  activeMatchId = matchId;
+
+  // Update header
+  const title = document.getElementById('trx-match-title');
+  const sub   = document.getElementById('trx-match-sub');
+  if (title) title.textContent = m.tanggal + ' — ' + m.tipeEvent;
+  if (sub)   sub.textContent   = m.venue + ' · Lapangan ' + m.tipeLapangan +
+                                  ' · HTM Rp ' + fmtNum(m.htmPlayer) +
+                                  ' · GK Rp ' + fmtNum(m.htmGk);
+
+  // Update estimasi margin
+  const salesPasti = m.salesPasti || 0;
+  const salesSem   = m.salesSem   || 0;
+  const cost       = m.totalCost  || 0;
+  const margin     = salesPasti - cost;
+  const mColor     = margin >= 0 ? 'var(--gn)' : 'var(--rd)';
+
+  const ep = document.getElementById('est-sales-pasti');
+  const es = document.getElementById('est-sales-sem');
+  const ec = document.getElementById('est-cost');
+  const em = document.getElementById('est-margin');
+  if (ep) ep.textContent = 'Rp ' + fmtNum(salesPasti);
+  if (es) es.textContent = 'Rp ' + fmtNum(salesSem);
+  if (ec) ec.textContent = 'Rp ' + fmtNum(cost);
+  if (em) { em.textContent = (margin>=0?'+':'') + 'Rp ' + fmtNum(Math.abs(margin)); em.style.color = mColor; }
+
+  // Update slot counter
+  const kuota = m.kuotaKiper + m.kuotaField;
+  const slotLbl = document.querySelector('#trx-slot .sec-lbl');
+  if (slotLbl) {
+    const txt = slotLbl.firstChild;
+    if (txt && txt.nodeType === 3) txt.textContent = 'Slot player — ' + (m.slotTerisi||0) + ' / ' + kuota + ' terisi ';
+  }
+
+  // Toggle view
+  document.getElementById('trx-list-view').style.display   = 'none';
+  document.getElementById('trx-detail-view').style.display = '';
+
+  // Set game mode sesuai jenis
+  setGameMode(m.jenisGame.includes('Football') ? 'football' : 'mini');
+}
+
+function backToMatchList() {
+  activeMatchId = null;
+  document.getElementById('trx-detail-view').style.display = 'none';
+  document.getElementById('trx-list-view').style.display   = '';
+  renderMatchList();
+}
+
+function fmtNum(n) {
+  return Number(n||0).toLocaleString('id-ID');
+}
+
+// Override createMatch untuk tambah ke matchList
+function submitMatchBaru() {
+  const form = document.getElementById('m-match-baru');
+  if (!form) return;
+
+  const get = (sel) => { const el = form.querySelector(sel); return el ? el.value : ''; };
+  const tgl      = get('input[type=date]');
+  const jenis    = get('select') ; // jenis game select
+  const selects  = form.querySelectorAll('select');
+
+  // Parse tanggal ke format display
+  const tglDate  = tgl ? new Date(tgl) : new Date();
+  const tglStr   = tglDate.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+
+  const newMatch = {
+    id          : 'match-' + tgl.replace(/-/g,'') + '-' + String(matchList.length+1).padStart(3,'0'),
+    tanggal     : tglStr,
+    tipeEvent   : selects[2] ? selects[2].value : 'Internal SMS',
+    jenisGame   : selects[0] ? selects[0].value : 'Minisoccer (7 vs 7)',
+    venue       : get('input[placeholder*="Venue"], input[placeholder*="nama lapangan"], input[placeholder*="Futsal"]') || '—',
+    tipeLapangan: selects[1] ? selects[1].value : 'Kecil',
+    htmPlayer   : parseInt(form.querySelectorAll('input[type=number], input[inputmode=numeric]')[0]?.value || 95000),
+    htmGk       : parseInt(form.querySelectorAll('input[type=number], input[inputmode=numeric]')[1]?.value || 35000),
+    kuotaKiper  : parseInt(form.querySelectorAll('input[type=number], input[inputmode=numeric]')[2]?.value || 4),
+    kuotaField  : parseInt(form.querySelectorAll('input[type=number], input[inputmode=numeric]')[3]?.value || 24),
+    status      : 'aktif',
+    slotTerisi  : 0,
+    salesPasti  : 0,
+    salesSem    : 0,
+    totalCost   : 0,
+  };
+
+  matchList.push(newMatch);
+  closeModal('m-match-baru');
+  backToMatchList();       // balik ke list, match baru langsung kelihatan
+  renderMatchList();
+  // TODO: simpan ke Sheets via API.createMatch(newMatch)
+}
+
+// Saat halaman transaksi dibuka — render list
+const _origGoPage = typeof goPage === 'function' ? goPage : null;
+
+
+function tutupMatch() {
+  if (!activeMatchId) return;
+  const idx = matchList.findIndex(m => m.id === activeMatchId);
+  if (idx < 0) return;
+  matchList[idx].status = 'tutup';
+  closeModal('m-tutup-match');
+  backToMatchList();
+  // TODO: API.closeMatch({matchId: activeMatchId, ...data rekap})
 }
 
 </script>
