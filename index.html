@@ -554,13 +554,14 @@ const AUTH = {
       </div>
     </div>
     <!-- Tab sidebar + panels (existing) -->
-    <div class="trx-side">
+    <div class="trx-wrap" style="border-radius:0;border:none;border-top:1px solid var(--bd)">
+      <div class="trx-side">
         <div class="trx-st active" onclick="trxTab('slot',this)"><i class="ti ti-users" style="font-size:13px"></i> Slot player</div>
         <div class="trx-st" onclick="trxTab('biaya',this)"><i class="ti ti-receipt" style="font-size:13px"></i> Biaya match</div>
         <div class="trx-st" onclick="trxTab('deposit',this)"><i class="ti ti-wallet" style="font-size:13px"></i> Deposit player</div>
         <div class="trx-st" onclick="trxTab('gol',this)"><i class="ti ti-ball-football" style="font-size:13px"></i> Goal scorer</div>
         <div class="trx-st" onclick="trxTab('rekap',this)"><i class="ti ti-chart-pie" style="font-size:13px"></i> Rekap akhir</div>
-      </div>
+      </div><!-- /trx-side -->
       <div class="trx-main">
 
         <!-- SLOT PLAYER — Tim di kanan Status, SHTM flag di sebelah nama -->
@@ -805,9 +806,9 @@ const AUTH = {
         </div>
 
       </div>
-    </div>
     </div><!-- /trx-wrap -->
   </div>
+</div>
 
 <div id="page-admin" class="page">
 <div class="cont">
