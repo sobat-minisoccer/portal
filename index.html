@@ -530,7 +530,7 @@ const AUTH = {
   </div>
 
   <!-- ── DETAIL VIEW: tab match yang dipilih ── -->
-  <div id="trx-detail-view" style="display:none">
+  <div id="trx-detail-view" style="display:none;pointer-events:none">
     <!-- Match header (diisi JS) -->
     <div class="card" style="margin-bottom:12px" id="trx-detail-header">
       <div class="mhd">
@@ -806,8 +806,8 @@ const AUTH = {
 
       </div>
     </div>
+    </div><!-- /trx-wrap -->
   </div>
-</div>
 
 <div id="page-admin" class="page">
 <div class="cont">
@@ -1385,8 +1385,8 @@ function goPage(id){
     // Selalu mulai dari list view
     const lv = document.getElementById('trx-list-view');
     const dv = document.getElementById('trx-detail-view');
-    if(lv) lv.style.display = '';
-    if(dv) dv.style.display = 'none';
+    if(lv){ lv.style.display = ''; lv.style.pointerEvents = ''; }
+    if(dv){ dv.style.display = 'none'; dv.style.pointerEvents = 'none'; }
     setTimeout(renderMatchList, 50);
   }
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -1972,7 +1972,9 @@ function openMatch(matchId) {
 
   // Toggle view
   document.getElementById('trx-list-view').style.display   = 'none';
-  document.getElementById('trx-detail-view').style.display = '';
+  const dv2=document.getElementById('trx-detail-view');
+  dv2.style.display = '';
+  dv2.style.pointerEvents = '';
 
   // Set game mode sesuai jenis
   setGameMode(m.jenisGame.includes('Football') ? 'football' : 'mini');
@@ -1980,7 +1982,9 @@ function openMatch(matchId) {
 
 function backToMatchList() {
   activeMatchId = null;
-  document.getElementById('trx-detail-view').style.display = 'none';
+  const dv3=document.getElementById('trx-detail-view');
+  dv3.style.display = 'none';
+  dv3.style.pointerEvents = 'none';
   document.getElementById('trx-list-view').style.display   = '';
   renderMatchList();
 }
